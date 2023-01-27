@@ -4,7 +4,12 @@
 *** Features
 1) Implement CHIP8 and perhaps SUPERCHIP opcodes.
 2) Laptop-friendly Keyboard  handling
-3) 63x32 display
+3) 64x32 display
 
 *** Milestones
 1) Working Display Module
+  1) 64x32 mode
+  2) Double Buffering
+  3) Display Scaling
+2) Registers
+  
