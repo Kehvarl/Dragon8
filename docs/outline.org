@@ -12,4 +12,5 @@
   2) Double Buffering
   3) Display Scaling
 2) Registers
-  
+  1) PC
+  2) General Purpose (16 bit)
