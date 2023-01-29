@@ -11,6 +11,7 @@
   1) 64x32 mode
   2) Double Buffering
   3) Display Scaling
+  4) Write Byte at Address
 2) Sprites
   1) 8px wide by 1-15 (1-F) high
   2) XORed to screen
