@@ -11,6 +11,14 @@
   1) 64x32 mode
   2) Double Buffering
   3) Display Scaling
+2) Sprites
+  1) 8px wide by 1-15 (1-F) high
+  2) XORed to screen
+  3) VF set to 1 if any pixel flips from Set to Unset.  Otherwise 0
 2) Registers
-  1) PC
-  2) General Purpose (16 bit)
+  1) Address (I) 12 bit - 4096k addressable
+  2) 16 General Purpose (V0-VF) 8 bit
+3) Stack - 48 bytes minimum
+4) Timers - Each timer decrements at 60hz until 0
+  1) Delay - Value can be set and read
+  2) Sound - While nonzero, emit "beep" sound
