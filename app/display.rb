@@ -38,10 +38,33 @@ class Display
     buffer
   end
 
+  def clear buffer=nil
+    if buffer
+      @screen_buffers[buffer] = create_screen_buffer
+    else
+    @screen_buffers = []
+    @screen_buffers << create_screen_buffer
+    @screen_buffers << create_screen_buffer      
+    end
+  end
+
   def setpixel x, y, r=0, g=0, b=0, buffer=0
     @screen_buffers[buffer][y][x].r = r
     @screen_buffers[buffer][y][x].g = g
     @screen_buffers[buffer][y][x].b = b    
+  end
+
+  def xorpixel x, y, set=false, buffer=0
+    set_to_unset = false
+    color = 255 if set else 0
+    if @screen_buffers[buffer][y][x].r == 255
+      if set
+        set_to_unset = true
+        color = 0
+      end
+    end
+    setpixel(x, y, color, color, color, buffer)
+    return set_to_unset
   end
 
   def next_buffer
@@ -49,6 +72,10 @@ class Display
       return 1
     end
     return 0
+  end
+
+  def current_buffer
+    @current_buffer
   end
 
   def next_screen_buffer
