@@ -11,7 +11,7 @@
 ***** DONE 64x32 mode
 ***** DONE Double Buffering
 ***** TODO Display Scaling
-***** TODO XOR Pixel
+***** DONE XOR Pixel
 ***** TODO Write Byte at Address
 
 **** TODO Sprites
