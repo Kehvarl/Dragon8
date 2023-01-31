@@ -2,7 +2,7 @@ def initialize args
   args.state.display ||=  Display.new({margin_bottom:256})
 
 
-  args.state.display.setpixel(rand(64), rand(32), 255, 0, 0, args.state.display.next_buffer)
+  args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
 end
 
 def tick args
@@ -15,5 +15,16 @@ def tick args
   if args.inputs.keyboard.key_down.j
     args.state.display.swap()
   end
+
+  if args.inputs.keyboard.key_up.s
+      args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
+  end
   
+  if args.inputs.keyboard.key_down.k
+    args.state.display.clear(args.state.display.current_buffer)
+  end
+
+  if args.inputs.keyboard.key_down.a
+    args.state.display.clear
+  end
 end
