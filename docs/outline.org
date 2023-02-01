@@ -7,17 +7,17 @@
 **** TODO 64x32 display
 
 *** Milestones
-**** TODO Working Display Module
-***** DONE 64x32 mode
-***** DONE Double Buffering
-***** TODO Display Scaling
-***** DONE XOR Pixel
-***** TODO Write Byte at Address
-
-**** TODO Sprites
-***** TODO 8px wide by 1-15 (1-F) high
-***** TODO XORed to screen
-***** TODO VF set to 1 if any pixel flips from Set to Unset.  Otherwise 0
+**** TODO FrameBuffer
+***** DONE Working Display Module
+****** DONE 64x32 mode
+****** DONE Double Buffering
+****** TODO Display Scaling
+****** DONE XOR Pixel
+****** DONE Write Byte at Address
+***** TODO Sprites
+****** TODO 8px wide by 1-15 (1-F) high
+****** TODO XORed to screen
+****** TODO VF set to 1 if any pixel flips from Set to Unset.  Otherwise 0
 
 **** TODO Registers
 ***** TODO Address (I) 12 bit - 4096k addressable

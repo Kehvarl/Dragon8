@@ -16,8 +16,9 @@ def tick args
     args.state.display.swap()
   end
 
-  if args.inputs.keyboard.key_up.s
-      args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
+  if args.inputs.keyboard.key_held.s
+      #args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
+    args.state.display.writebyte(rand(56), rand(32), 0b10101010, 0)
   end
   
   if args.inputs.keyboard.key_down.k
