@@ -17,8 +17,10 @@ def tick args
   end
 
   if args.inputs.keyboard.key_held.s
-      #args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
-    args.state.display.writebyte(rand(56), rand(32), 0b10101010, 0)
+    # args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
+    # args.state.display.writebyte(rand(56), rand(32), 0b10101010, 0)
+    sprite = [36, 102, 255, 126, 60, 24]
+    args.state.display.writesprite(rand(56), rand(27), sprite, 0)
   end
   
   if args.inputs.keyboard.key_down.k
