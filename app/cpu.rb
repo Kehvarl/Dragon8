@@ -49,37 +49,53 @@ class cpu
         @sp -= 1
       end
     when "1" # JMP NNN: Jump to address NNN
-      address = opcode[1,3].to_i
+      address = opcode[1,3].to_i(16)
       @pc = address
     when "2" # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
-      address = opcode[1,3].to_i
+      address = opcode[1,3].to_i(16)
       @pc = address
     when "3" # SE Vx, kk: Skip Next If Register X Equals Value KK
-      reg = opcode[1,1].to_i
-      val = opcode[2,2].to_i
+      reg = opcode[1,1].to_i(16)
+      val = opcode[2,2].to_i(16)
       if @register[reg] == val
         @pc += 2
       end
     when "4" # SNE Vx, kk: kip Next If Register X Not Equals Value KK
-      reg = opcode[1,1].to_i
-      val = opcode[2,2].to_i
+      reg = opcode[1,1].to_i(16)
+      val = opcode[2,2].to_i(16)
       if @register[reg] != val
         @pc += 2
       end
     when "5" # SE Vx, Vy: Skip Next If Register X Equals Register Y
-      regx = opcode[1,1].to_i
-      regy = opcode[2,1]/to_i
+      regx = opcode[1,1].to_i(16)
+      regy = opcode[2,1].to_i(16)
       if @register[regx] == @register[regy]
         @pc += 2
       end
     when "6" # LD Vx, kk: Load Value kk into Register X
-      reg = opcode[1,1].to_i
-      val = opcode[2,2].to_i
-      if @register[reg] != val
-        @pc += 2
-      end        
+      reg = opcode[1,1].to_i(16)
+      val = opcode[2,2].to_i(16)
+      @register[reg] = val
+    when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
+      reg = opcode[1,1].to_i(16)
+      val = opcode[2,2].to_i(16)
+      @register[reg] += val
+    when "8" # Register X,Y functions
+      regx = opcode[1,1].to_i(16)
+      regy = opcode[2,1].to_i(16)
+      operation = opcode[3,1].to_i
+      case operation
+      when "0" # LD Vx, Vy: Load Value from Register Y into Register X
+        @register[regx] = @register[regy]
+      when "1" # OR Vx, Vy: Register X OR Register Y, store in Register X
+        @register[regx] = @register[regx] | @register[regy]
+      when "2" # AND Vx, Vy: Register X AND Register Y, store in Register X
+        @register[regx] = @register[regx] & @register[regy]
+      when "3" # XOR Vx, Vy: Register X XOR Register Y, store in Register X
+        @register[regx[ = @register[regx] ^ @register[regy]
+      end
     end
   end
   
