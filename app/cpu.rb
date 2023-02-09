@@ -94,7 +94,23 @@ class cpu
       when "2" # AND Vx, Vy: Register X AND Register Y, store in Register X
         @register[regx] = @register[regx] & @register[regy]
       when "3" # XOR Vx, Vy: Register X XOR Register Y, store in Register X
-        @register[regx[ = @register[regx] ^ @register[regy]
+        @register[regx] = @register[regx] ^ @register[regy]
+      when "4" # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
+        sum = @register[regx] + @register[regy]
+        if sum > 255
+          sum -= 255
+          @register[15] = 1
+        end
+        @register[regx] = sum
+      when "5" # SUB Vx, Vy: Register X XOR Register Y, store in Register X
+        if @register[regx] > @register[regy]
+          @register[15] = 1
+        else
+          @register[15] = 0
+          @register[regx] += 256
+        end
+        @register[regx] = @register[regx] - @register[regy]
+        
       end
     end
   end
