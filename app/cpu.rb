@@ -110,7 +110,11 @@ class cpu
           @register[regx] += 256
         end
         @register[regx] = @register[regx] - @register[regy]
-        
+      when "6" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
+        if @register[regx].odd?
+          @register[15] = 1
+        end
+        @register[regx] = @register[regx] / 2      
       end
     end
   end
