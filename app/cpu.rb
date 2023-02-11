@@ -102,7 +102,7 @@ class cpu
           @register[15] = 1
         end
         @register[regx] = sum
-      when "5" # SUB Vx, Vy: Register X XOR Register Y, store in Register X
+      when "5" # SUB Vx, Vy: Register X - Register Y, store in Register X
         if @register[regx] > @register[regy]
           @register[15] = 1
         else
@@ -114,7 +114,15 @@ class cpu
         if @register[regx].odd?
           @register[15] = 1
         end
-        @register[regx] = @register[regx] / 2      
+        @register[regx] = @register[regx] / 2
+      when "7" # SUBN Vx, Vy: Register Y - Register X, store in Register X
+        if @register[regy] > @register[regx]
+          @register[15] = 1
+        else
+          @register[15] = 0
+          @register[regy] += 256
+        end
+        @register[regx] = @register[regy] - @register[regx]        
       end
     end
   end
