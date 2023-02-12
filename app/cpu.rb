@@ -121,9 +121,15 @@ class cpu
           @register[regy] += 256
         end
         @register[regx] = @register[regy] - @register[regx]
-      when "E" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
+      when "E" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
+      end
+    when "9" # SNE Vx, Vy: Skip Next If Register X Not Equal To Register Y
+      regx = opcode[1,1].to_i(16)
+      regy = opcode[2,1].to_i(16)
+      if @register[regx] != @register[regy]
+        @pc += 2
       end
     end
   end
