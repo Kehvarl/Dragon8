@@ -111,9 +111,7 @@ class cpu
         end
         @register[regx] = @register[regx] - @register[regy]
       when "6" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
-        if @register[regx].odd?
-          @register[15] = 1
-        end
+        @register[15] = @register[regx] & 1
         @register[regx] = @register[regx] / 2
       when "7" # SUBN Vx, Vy: Register Y - Register X, store in Register X
         if @register[regy] > @register[regx]
@@ -122,7 +120,16 @@ class cpu
           @register[15] = 0
           @register[regy] += 256
         end
-        @register[regx] = @register[regy] - @register[regx]        
+        @register[regx] = @register[regy] - @register[regx]
+      when "E" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
+        @register[15] = @register[regx] & 128
+        @register[regx] = @register[regx] * 2        
+      end
+    when "9" # SNE Vx, Vy: Skip Next If Register X Not Equal To Register Y
+      regx = opcode[1,1].to_i(16)
+      regy = opcode[2,1].to_i(16)
+      if @register[regx] != @register[regy]
+        @pc += 2
       end
     end
   end
