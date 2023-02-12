@@ -30,7 +30,21 @@
 ***** TODO Sound - While nonzero, emit "beep" sound
 
 **** TODO Opcodes
-***** DONE ALU Opcodes - 0x8nnn: Perform Logical operations on registers
-***** DONE Flow Control - 0x1nnn..0x7nnn, 0x9nnn: Branch Control and Subroutines
+***** DONE Register Operations
+****** DONE LD Vx Immediate 
+****** DONE ADD Vx, Immediate
+****** DONE 0x8nnn - Multiple Operations
+***** TODO Flow Control -
+****** DONE CALL
+****** DONE RET
+****** DONE JMP
+****** DONE SE Immediate
+****** DONE SNE Immediate
+****** DONE SE Register
+****** DONE SNE Register
+****** TODO JMP Indirect
 ***** TODO Memory Management
+****** TODO LD Address into I
 ***** TODO Graphics Interaction
+***** TODO Timers
+***** TODO Keyboard
