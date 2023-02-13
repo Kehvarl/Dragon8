@@ -131,6 +131,8 @@ class cpu
       if @register[regx] != @register[regy]
         @pc += 2
       end
+    when "A" # LD I, Addr: Load value Addr into Register I
+      @I = opcode[1,3].to_i(16)
     end
   end
   
