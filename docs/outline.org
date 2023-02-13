@@ -44,7 +44,7 @@
 ****** DONE SNE Register
 ****** TODO JMP Indirect
 ***** TODO Memory Management
-****** TODO LD Address into I
+****** DONE LD Address into I
 ***** TODO Graphics Interaction
 ***** TODO Timers
 ***** TODO Keyboard
