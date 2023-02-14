@@ -133,6 +133,9 @@ class cpu
       end
     when "A" # LD I, Addr: Load value Addr into Register I
       @I = opcode[1,3].to_i(16)
+    when "B" # JMP V0 NNN: Jump to address V0 + NNN
+      address = opcode[1,3].to_i(16)
+      @pc = address + @register[0]
     end
   end
   
