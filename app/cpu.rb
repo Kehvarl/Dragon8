@@ -136,6 +136,11 @@ class cpu
     when "B" # JMP V0 NNN: Jump to address V0 + NNN
       address = opcode[1,3].to_i(16)
       @pc = address + @register[0]
+    when "C" # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
+      regx = opcode[1,1].to_i(16)
+      const = opcode[2,2].to_i(16)
+      byte = rand(256) & const
+      @register[regx] = byte
     end
   end
   
