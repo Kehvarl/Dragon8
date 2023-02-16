@@ -141,7 +141,21 @@ class cpu
       const = opcode[2,2].to_i(16)
       byte = rand(256) & const
       @register[regx] = byte
+    when "D" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
+      # Coordinate: Vx, Vy
+      regx = opcode[1,1].to_i(16)
+      regy = opcode[2,1].to_i(16)
+      n    = opcode[3,1].to_i(16)
+      sprite = []
+      (0..n).each do |offset|
+        sprite << @memory[@I + offset]
+      end
+      if @display.writesprite @register[regx], @register[regy], sprite
+        @register[15] = 1
+      else
+        @register[15] = 0
+      end
+        
     end
   end
-  
 end
