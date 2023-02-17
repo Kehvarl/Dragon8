@@ -36,7 +36,7 @@ class cpu
     @pc += 2
   end
 
-  def decode opcode
+  def decode opcode args
     op = opcode[0]
     case op
     when "0"
@@ -155,7 +155,15 @@ class cpu
       else
         @register[15] = 0
       end
-        
+    when "E" # Keyboard Commands
+      regx = opcode[1,2].to_i(16)
+      operation = opcode[2,2]
+      case operation
+      when "9E" # SKP Vx: Skip next operation if Key Vx is held
+        if args.inputs.keyboard.keys.down.include?
+          @pc += 2
+        end
+      end
     end
   end
 end
