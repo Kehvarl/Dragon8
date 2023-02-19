@@ -26,7 +26,12 @@ class cpu
   end
 
   def step
-    
+    if @delay > 0
+      @delay -=1
+    end
+    if @sound > 0
+      @sound -=1
+    end
   end
 
   def readbyte address
