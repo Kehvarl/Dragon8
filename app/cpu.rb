@@ -13,6 +13,8 @@ class cpu
     (0..48).each do
       @stack << 0
     end
+    @delay
+    @sound
   end
 
   def vf
@@ -24,7 +26,12 @@ class cpu
   end
 
   def step
-    
+    if @delay > 0
+      @delay -=1
+    end
+    if @sound > 0
+      @sound -=1
+    end
   end
 
   def readbyte address
@@ -156,13 +163,24 @@ class cpu
         @register[15] = 0
       end
     when "E" # Keyboard Commands
-      regx = opcode[1,2].to_i(16)
+      regx = opcode[1,1].to_i(16)
       operation = opcode[2,2]
       case operation
       when "9E" # SKP Vx: Skip next operation if Key Vx is held
         if args.inputs.keyboard.keys.down.include?
           @pc += 2
         end
+      when "A1" # SKNP Vx: Skip next operation if Key Vx is not held
+        if !args.inputs.keyboard.keys.down.include?
+          @pc += 2
+        end
+      end
+    when "F" # Timer Commands
+      regx = opcode[1,1].to_i(16)
+      operation = opcode[2,2]
+      case operation
+      when "07" # LD Vx, DT: Load the value from Register X into the Delay Timer
+        @delay = @register[regx]
       end
     end
   end
