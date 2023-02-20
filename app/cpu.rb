@@ -15,6 +15,8 @@ class cpu
     end
     @delay
     @sound
+    @keycapture = false
+    @keytarget = 0
   end
 
   def vf
@@ -25,7 +27,12 @@ class cpu
     @register[15] = arg
   end
 
-  def step
+  def step args
+    if @keycapture
+      key = args.inputs.keyboard.keys
+      @register[@keytarget] = key
+      return
+    end
     if @delay > 0
       @delay -=1
     end
@@ -181,6 +188,9 @@ class cpu
       case operation
       when "07" # LD Vx, DT: Load the value from Register X into the Delay Timer
         @delay = @register[regx]
+      when "0A" # LD Vx, K: Load pressed key into Register X
+        @keycapture = true
+        @keytarget = regx
       end
     end
   end
