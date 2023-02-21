@@ -186,11 +186,13 @@ class cpu
       regx = opcode[1,1].to_i(16)
       operation = opcode[2,2]
       case operation
-      when "07" # LD Vx, DT: Load the value from Register X into the Delay Timer
-        @delay = @register[regx]
+      when "07" # LD Vx, DT: Load the value from the Delay Timer into  Register X
+        @register[regx] = @delay
       when "0A" # LD Vx, K: Load pressed key into Register X
         @keycapture = true
         @keytarget = regx
+      when "15" # LD DS, Vx: Load the value from Register X into the Delay Timer
+        @delay = @register[regx]
       end
     end
   end
