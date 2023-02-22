@@ -193,6 +193,8 @@ class cpu
         @keytarget = regx
       when "15" # LD DS, Vx: Load the value from Register X into the Delay Timer
         @delay = @register[regx]
+      when "18" # LD ST, Vx: Load the value from Register X into the Sound Timer
+        @sound = @register[regx]
       end
     end
   end
