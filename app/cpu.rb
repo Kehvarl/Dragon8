@@ -95,6 +95,10 @@ class cpu
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
+      if @register[reg] + val > 255
+        val -= 255
+        @register[15] = 1
+      end
       @register[reg] += val
     when "8" # Register X,Y functions
       regx = opcode[1,1].to_i(16)
@@ -195,6 +199,12 @@ class cpu
         @delay = @register[regx]
       when "18" # LD ST, Vx: Load the value from Register X into the Sound Timer
         @sound = @register[regx]
+      when "1E" # Add I, Vx: Add the value from Register X to the value in I. Store in I
+        if @i + @register[regx] > 255
+          @i -= 255
+          @register[15] = 1
+        end
+        @i += @register[regx]
       end
     end
   end
