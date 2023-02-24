@@ -13,6 +13,7 @@ class cpu
     (0..48).each do
       @stack << 0
     end
+    @symbol = {}
     @delay
     @sound
     @keycapture = false
@@ -205,6 +206,8 @@ class cpu
           @register[15] = 1
         end
         @i += @register[regx]
+      when "29" # LD F, Vx: Load address of sprite for value Vx into I
+        @i = @symbol[@register[regx]]
       end
     end
   end
