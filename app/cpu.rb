@@ -46,6 +46,10 @@ class cpu
     @memory[address].to_s(16).rjust(2,"0")
   end
 
+  def readregister reg
+    @register[reg[.to_s(16).rjust(2, "0")
+  end
+
   def fetch
     opcode = readbyte(@pc) + readbyte(@pc + 1)
     @pc += 2
@@ -208,6 +212,11 @@ class cpu
         @i += @register[regx]
       when "29" # LD F, Vx: Load address of sprite for value Vx into I
         @i = @symbol[@register[regx]]
+      when "33" # LD B, Vx: Load the BCD Representation of value in Register X into memory
+        val = @resgister[regx].to_s(10).rjust(2, "0")
+        @memory[@i] = val[0].to_i(10)
+        @memory[@i+1] = val[1].to_i(10)
+        @memory[@i+2] = val[2].to_i(10)
       end
     end
   end
