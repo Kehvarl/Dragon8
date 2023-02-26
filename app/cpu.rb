@@ -217,6 +217,10 @@ class cpu
         @memory[@i] = val[0].to_i(10)
         @memory[@i+1] = val[1].to_i(10)
         @memory[@i+2] = val[2].to_i(10)
+      when "55" # LD [I], Vx: Store the values in Registers 0 through X in memory
+        (0..regx).each do |reg|
+          @memory[@i + reg] = @register[reg]
+        end
       end
     end
   end
