@@ -221,6 +221,11 @@ class cpu
         (0..regx).each do |reg|
           @memory[@i + reg] = @register[reg]
         end
+      when "65" # LD Vx, [I]: Load the values from I..I+x into Registers 0 to X
+        (0..regx).each do |reg|
+          @register[reg] = @memory[@i + reg]
+        end
+        
       end
     end
   end
