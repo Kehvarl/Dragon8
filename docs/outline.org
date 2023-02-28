@@ -14,27 +14,27 @@
 ****** TODO Display Scaling
 ****** DONE XOR Pixel
 ****** DONE Write Byte at Address
-***** TODO Sprites
-****** TODO 8px wide by 1-15 (1-F) high
-****** TODO XORed to screen
-****** TODO VF set to 1 if any pixel flips from Set to Unset.  Otherwise 0
+***** DONE Sprites
+****** DONE 8px wide by 1-15 (1-F) high
+****** DONE XORed to screen
+****** DONE VF set to 1 if any pixel flips from Set to Unset.  Otherwise 0
 
-**** TODO Registers
+**** DONE Registers
 ***** DONE Address (I) 12 bit - 4096k addressable
 ***** DONE 16 General Purpose (V0-VF) 8 bit
 
-**** TODO Stack - 48 bytes minimum
+**** DONE Stack - 48 bytes minimum
 
-**** TODO Timers - Each timer decrements at 60hz until 0
-***** TODO Delay - Value can be set and read
-***** TODO Sound - While nonzero, emit "beep" sound
+**** DONE Timers - Each timer decrements at 60hz until 0
+***** DONE Delay - Value can be set and read
+***** DONE Sound - While nonzero, emit "beep" sound
 
 **** TODO Opcodes
 ***** DONE Register Operations
 ****** DONE LD Vx Immediate 
 ****** DONE ADD Vx, Immediate
 ****** DONE 0x8nnn - Multiple Operations
-***** TODO Flow Control -
+***** DONE Flow Control -
 ****** DONE CALL
 ****** DONE RET
 ****** DONE JMP
@@ -42,9 +42,9 @@
 ****** DONE SNE Immediate
 ****** DONE SE Register
 ****** DONE SNE Register
-****** TODO JMP Indirect
-***** TODO Memory Management
+****** DONE JMP Indirect
+***** DONE Memory Management
 ****** DONE LD Address into I
-***** TODO Graphics Interaction
-***** TODO Timers
+***** DONE Graphics Interaction
+***** DONE Timers
 ***** TODO Keyboard
