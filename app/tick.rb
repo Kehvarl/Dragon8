@@ -1,5 +1,6 @@
 def initialize args
   args.state.display ||=  Display.new({margin_bottom:256})
+  args.state.keyboard ||= Keyboard.new()
 
 
   args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
