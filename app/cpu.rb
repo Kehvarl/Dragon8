@@ -28,10 +28,9 @@ class cpu
     @register[15] = arg
   end
 
-  def step args
+  def step keyboard
     if @keycapture
-      key = args.inputs.keyboard.keys
-      @register[@keytarget] = key
+      @register[@keytarget] = keyboard.current
       return
     end
     if @delay > 0
