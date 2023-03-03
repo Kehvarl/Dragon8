@@ -1,5 +1,7 @@
 class cpu
+  attr_accessor :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
+    @ticks_per_frame = 16
     @display = display
     @register = []
     @i = 0
@@ -16,6 +18,7 @@ class cpu
     @symbol = {}
     @delay
     @sound
+    @keydown = nil
     @keycapture = false
     @keytarget = 0
   end
@@ -28,9 +31,10 @@ class cpu
     @register[15] = arg
   end
 
-  def step keyboard
+  def tick keyboard
+    @keydown = keyboard.current
     if @keycapture
-      @register[@keytarget] = keyboard.current
+      @register[@keytarget] = @keydown
       return
     end
     if @delay > 0
@@ -39,6 +43,13 @@ class cpu
     if @sound > 0
       @sound -=1
     end
+    (0..@ticks_per_frame).each do
+      step
+    end
+  end
+
+  def step
+    decode(fetch)
   end
 
   def readbyte address
@@ -52,16 +63,17 @@ class cpu
   def fetch
     opcode = readbyte(@pc) + readbyte(@pc + 1)
     @pc += 2
+    opcode
   end
 
-  def decode opcode args
+  def decode opcode
     op = opcode[0]
     case op
     when "0"
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif opcode = "00E0" # CLS: Clear Screen
-        @display.clear()
+        @display.clear()!args.inputs.keyboard.keys.down.include?
       elsif opcode = "00EE" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
@@ -182,11 +194,11 @@ class cpu
       operation = opcode[2,2]
       case operation
       when "9E" # SKP Vx: Skip next operation if Key Vx is held
-        if args.inputs.keyboard.keys.down.include?
+        if @keydown == @register[regx]
           @pc += 2
         end
       when "A1" # SKNP Vx: Skip next operation if Key Vx is not held
-        if !args.inputs.keyboard.keys.down.include?
+        if @keydown != @register[regx]
           @pc += 2
         end
       end
