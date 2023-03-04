@@ -1,4 +1,4 @@
-class cpu
+class CPU
   attr_accessor :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
     @ticks_per_frame = 16
@@ -16,8 +16,8 @@ class cpu
       @stack << 0
     end
     @symbol = {}
-    @delay
-    @sound
+    @delay = 0
+    @sound = 0
     @keydown = nil
     @keycapture = false
     @keytarget = 0
@@ -31,18 +31,28 @@ class cpu
     @register[15] = arg
   end
 
+  def set pgm
+    pgm.each_with_index do |op, i|
+      @memory[i] = op.to_i(16)
+    end
+    @pc = 0
+  end
+
   def tick keyboard
     @keydown = keyboard.current
-    if @keycapture
+    if @keycapture == true
       @register[@keytarget] = @keydown
       return
     end
+    
     if @delay > 0
       @delay -=1
     end
+    
     if @sound > 0
       @sound -=1
     end
+    
     (0..@ticks_per_frame).each do
       step
     end
@@ -57,7 +67,7 @@ class cpu
   end
 
   def readregister reg
-    @register[reg[.to_s(16).rjust(2, "0")
+    @register[reg].to_s(16).rjust(2, "0")
   end
 
   def fetch
@@ -73,7 +83,7 @@ class cpu
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif opcode = "00E0" # CLS: Clear Screen
-        @display.clear()!args.inputs.keyboard.keys.down.include?
+        @display.clear()
       elsif opcode = "00EE" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
