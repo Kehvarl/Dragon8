@@ -14,8 +14,22 @@ def tick args
   end
   args.outputs.primitives << {x:0, y:0, w:1280, h:720, r:128, g:128, b:128}.solid! 
   args.outputs.primitives << args.state.display.screen
-  
-  if args.inputs.keyboard.key_down.j
+
+  args.inputs.keyboard.keys[:down].each do |key|
+    args.state.keyboard.keydown key
+  end
+
+  args.inputs.keyboard.keys[:up].each do |key|
+    args.state.keyboard.keyup key
+  end
+
+  if args.inputs.keyboard.key_down.s
+    args.state.cpu.tick args.state.keyboard
+  end
+end
+
+def junk args
+   if args.inputs.keyboard.key_down.j
     args.state.display.swap()
   end
 
@@ -33,14 +47,4 @@ def tick args
   if args.inputs.keyboard.key_down.a
     args.state.display.clear
   end
-
-  args.inputs.keyboard.keys[:down].each do |key|
-    args.state.keyboard.keydown key
-  end
-
-  args.inputs.keyboard.keys[:up].each do |key|
-    args.state.keyboard.keyup key
-  end
-
-  args.state.cpu.tick args.state.keyboard
 end

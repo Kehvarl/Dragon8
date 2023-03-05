@@ -8,14 +8,14 @@ class Keyboard
       '8','9', 'A', 'B', 'C', 'D', 'E', 'F']
   end
 
-  def keypdown key
-    if @allowed_keys.has_value?(key)
+  def keydown key
+    if @allowed_keys.include?(key)
       @current = key
     end
   end
 
   def keyup key
-    if @allowed_keys.has_value?(key)
+    if @allowed_keys.include?(key)
       @current = nil
       @buffer << key
     end
