@@ -1,7 +1,7 @@
 class CPU
   attr_accessor :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
-    @ticks_per_frame = 16
+    @ticks_per_frame = 1
     @display = display
     @register = []
     @i = 0
@@ -32,8 +32,13 @@ class CPU
   end
 
   def set pgm
-    pgm.each_with_index do |op, i|
-      @memory[i] = op.to_i(16)
+    addr = 0
+    pgm.each do |op|
+      a = op[0,2]
+      b = op[2,2]
+      @memory[addr] = a.to_i(16)
+      @memory[addr+1] = b.to_i(16)
+      addr += 2
     end
     @pc = 0
   end
@@ -48,7 +53,6 @@ class CPU
     if @delay > 0
       @delay -=1
     end
-    
     if @sound > 0
       @sound -=1
     end
@@ -59,7 +63,8 @@ class CPU
   end
 
   def step
-    decode(fetch)
+    op = fetch
+    decode(op)
   end
 
   def readbyte address
@@ -73,6 +78,9 @@ class CPU
   def fetch
     opcode = readbyte(@pc) + readbyte(@pc + 1)
     @pc += 2
+    if @pc > 4096
+      @pc = 0
+    end
     opcode
   end
 
@@ -82,9 +90,9 @@ class CPU
     when "0"
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
-      elsif opcode = "00E0" # CLS: Clear Screen
+      elsif opcode = "00e0" # CLS: Clear Screen
         @display.clear()
-      elsif opcode = "00EE" # RTN: Return from Subroutine
+      elsif opcode = "00ee" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
       end
@@ -165,7 +173,7 @@ class CPU
           @register[regy] += 256
         end
         @register[regx] = @register[regy] - @register[regx]
-      when "E" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
+      when "e" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
       end
@@ -175,57 +183,58 @@ class CPU
       if @register[regx] != @register[regy]
         @pc += 2
       end
-    when "A" # LD I, Addr: Load value Addr into Register I
+    when "a" # LD I, Addr: Load value Addr into Register I
       @I = opcode[1,3].to_i(16)
-    when "B" # JMP V0 NNN: Jump to address V0 + NNN
+    when "b" # JMP V0 NNN: Jump to address V0 + NNN
       address = opcode[1,3].to_i(16)
       @pc = address + @register[0]
-    when "C" # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
+    when "c" # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
       regx = opcode[1,1].to_i(16)
       const = opcode[2,2].to_i(16)
       byte = rand(256) & const
       @register[regx] = byte
-    when "D" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
-      # Coordinate: Vx, Vy
+    when "d" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
+      # Coordinate: Vx, Vy53279
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
-      n    = opcode[3,1].to_i(16)
+      n    = opcode[3,1].to_i(16) -1
       sprite = []
       (0..n).each do |offset|
-        sprite << @memory[@I + offset]
+        sprite << readbyte(@i + offset)[0,2].to_i
       end
-      if @display.writesprite @register[regx], @register[regy], sprite
+      #puts(regx, @register[regx], regy, @register[regy], sprite)
+      if @display.writesprite(@register[regx], @register[regy], sprite, 0)
         @register[15] = 1
       else
         @register[15] = 0
       end
-    when "E" # Keyboard Commands
+    when "e" # Keyboard Commands
       regx = opcode[1,1].to_i(16)
       operation = opcode[2,2]
       case operation
-      when "9E" # SKP Vx: Skip next operation if Key Vx is held
+      when "9e" # SKP Vx: Skip next operation if Key Vx is held
         if @keydown == @register[regx]
           @pc += 2
         end
-      when "A1" # SKNP Vx: Skip next operation if Key Vx is not held
+      when "a1" # SKNP Vx: Skip next operation if Key Vx is not held
         if @keydown != @register[regx]
           @pc += 2
         end
       end
-    when "F" # Timer Commands
+    when "f" # Timer Commands
       regx = opcode[1,1].to_i(16)
       operation = opcode[2,2]
       case operation
       when "07" # LD Vx, DT: Load the value from the Delay Timer into  Register X
         @register[regx] = @delay
-      when "0A" # LD Vx, K: Load pressed key into Register X
+      when "0a" # LD Vx, K: Load pressed key into Register X
         @keycapture = true
         @keytarget = regx
       when "15" # LD DS, Vx: Load the value from Register X into the Delay Timer
         @delay = @register[regx]
       when "18" # LD ST, Vx: Load the value from Register X into the Sound Timer
         @sound = @register[regx]
-      when "1E" # Add I, Vx: Add the value from Register X to the value in I. Store in I
+      when "1e" # Add I, Vx: Add the value from Register X to the value in I. Store in I
         if @i + @register[regx] > 255
           @i -= 255
           @register[15] = 1
