@@ -1,6 +1,7 @@
 class CPU
-  attr_accessor :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
+  attr_accessor :debug, :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
+    @debug = true
     @ticks_per_frame = 1
     @display = display
     @register = []
@@ -63,7 +64,11 @@ class CPU
   end
 
   def step
+    p = @pc
     op = fetch
+    if @debug
+      puts("#{p.to_s(16).rjust(4,"0")}: #{op}")
+    end
     decode(op)
   end
 
@@ -125,6 +130,9 @@ class CPU
     when "6" # LD Vx, kk: Load Value kk into Register X
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
+      if @debug
+        puts("#{reg} = 0x#{opcode[2,2]} :: #{val}")
+      end
       @register[reg] = val
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
       reg = opcode[1,1].to_i(16)
