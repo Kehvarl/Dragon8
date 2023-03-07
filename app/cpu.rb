@@ -96,19 +96,31 @@ class CPU
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif opcode = "00e0" # CLS: Clear Screen
+        if @debug
+          puts("Clearing Screen")
+        end
         @display.clear()
       elsif opcode = "00ee" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
+        if @debug
+          puts("Return to #{@pc}")
+        end
       end
     when "1" # JMP NNN: Jump to address NNN
       address = opcode[1,3].to_i(16)
+      if @debug
+        puts("JMP To #{address}")
+      end
       @pc = address
     when "2" # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
       address = opcode[1,3].to_i(16)
       @pc = address
+      if @debug
+        puts("CALL #{address}")
+      end
     when "3" # SE Vx, kk: Skip Next If Register X Equals Value KK
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
