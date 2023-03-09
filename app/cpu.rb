@@ -128,7 +128,7 @@ class CPU
         @pc += 2
       end
       if @debug
-        puts("SE #{@register[reg]} == #{val}")
+        puts("SE Vx #{@register[reg]} == #{val}")
       end
     when "4" # SNE Vx, kk: kip Next If Register X Not Equals Value KK
       reg = opcode[1,1].to_i(16)
@@ -137,13 +137,16 @@ class CPU
         @pc += 2
       end
       if @debug
-        puts("SNE #{@register[reg]} != @{val}")
+        puts("SNE Vx #{@register[reg]} != @{val}")
       end
     when "5" # SE Vx, Vy: Skip Next If Register X Equals Register Y
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
       if @register[regx] == @register[regy]
         @pc += 2
+      end
+      if @debug
+        puts("SE Vx #{@register[regx]} == Vy#{@register[regy]}")        
       end
     when "6" # LD Vx, kk: Load Value kk into Register X
       reg = opcode[1,1].to_i(16)
