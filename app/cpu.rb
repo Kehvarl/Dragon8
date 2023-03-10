@@ -152,7 +152,7 @@ class CPU
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
       if @debug
-        puts("#{reg} = 0x#{opcode[2,2]} :: #{val}")
+        puts("LD V#{reg} = 0x#{opcode[2,2]} :: #{val}")
       end
       @register[reg] = val
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
@@ -163,6 +163,9 @@ class CPU
         @register[15] = 1
       end
       @register[reg] += val
+      if @debug
+        puts("ADD V#{reg}, #{val}")        
+      end
     when "8" # Register X,Y functions
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
