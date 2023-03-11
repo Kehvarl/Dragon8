@@ -262,10 +262,10 @@ class CPU
       # Coordinate: Vx, Vy
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
-      n    = opcode[3,1].to_i(16) #-1
+      n    = opcode[3,1].to_i(16) -1
       sprite = []
       (0..n).each do |offset|
-        sprite << readbyte(@i + offset)[0,2].to_i
+        sprite << readbyte(@i + offset).to_i(16)
       end
       if @debug
         puts("DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})")

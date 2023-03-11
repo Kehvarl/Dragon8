@@ -26,6 +26,12 @@ def tick args
   if args.inputs.keyboard.key_down.s
     args.state.cpu.tick args.state.keyboard
   end
+  if args.inputs.keyboard.key_down.q
+    $gtk.request_quit
+  end
+  if args.inputs.keyboard.key_down.m
+    args.state.cpu.debug = !args.state.cpu.debug
+  end  
 end
 
 def junk args
