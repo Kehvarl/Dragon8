@@ -1,7 +1,7 @@
 class CPU
   attr_accessor :debug, :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
-    @debug = true
+    @debug = false
     @ticks_per_frame = 1
     @display = display
     @register = []
@@ -32,8 +32,8 @@ class CPU
     @register[15] = arg
   end
 
-  def set pgm
-    addr = 0
+  def set pgm, start=0x200
+    addr = start
     pgm.each do |op|
       a = op[0,2]
       b = op[2,2]
@@ -41,7 +41,7 @@ class CPU
       @memory[addr+1] = b.to_i(16)
       addr += 2
     end
-    @pc = 0
+    @pc = start
   end
 
   def tick keyboard
@@ -95,12 +95,12 @@ class CPU
     when "0"
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
-      elsif opcode = "00e0" # CLS: Clear Screen
+      elsif opcode == "00e0" # CLS: Clear Screen
         if @debug
           puts("Clearing Screen")
         end
         @display.clear()
-      elsif opcode = "00ee" # RTN: Return from Subroutine
+      elsif opcode == "00ee" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
         if @debug
@@ -110,7 +110,7 @@ class CPU
     when "1" # JMP NNN: Jump to address NNN
       address = opcode[1,3].to_i(16)
       if @debug
-        puts("JMP To #{address}")
+        puts("JMP To #{address.to_s(16).rjust(4, "0")}")
       end
       @pc = address
     when "2" # CALL NNN: Go to subroutine at address NNN
@@ -152,7 +152,7 @@ class CPU
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
       if @debug
-        puts("LD V#{reg} = 0x#{opcode[2,2]} :: #{val}")
+        puts("LD V#{reg} = 0x#{opcode[2,2]} : #{val}")
       end
       @register[reg] = val
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
@@ -172,14 +172,29 @@ class CPU
       operation = opcode[3,1].to_i
       case operation
       when "0" # LD Vx, Vy: Load Value from Register Y into Register X
+        if @debug
+          puts("LD V#{regx}, V#{regy} (#{@register[regy]})")
+        end
         @register[regx] = @register[regy]
       when "1" # OR Vx, Vy: Register X OR Register Y, store in Register X
-        @register[regx] = @register[regx] | @register[regy]
+        if @debug
+          puts("OR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] | @register[regy]}")
+        end
+        @register[regx] = @register[regx] | @register[regy]        
       when "2" # AND Vx, Vy: Register X AND Register Y, store in Register X
-        @register[regx] = @register[regx] & @register[regy]
+        if @debug
+          puts("AND V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] & @register[regy]}")
+        end
+        @register[regx] = @register[regx] & @register[regy]        
       when "3" # XOR Vx, Vy: Register X XOR Register Y, store in Register X
+        if @debug
+          puts("XOR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] ^ @register[regy]}")
+        end        
         @register[regx] = @register[regx] ^ @register[regy]
       when "4" # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
+        if @debug
+          puts("ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}")
+        end
         sum = @register[regx] + @register[regy]
         if sum > 255
           sum -= 255
@@ -187,6 +202,9 @@ class CPU
         end
         @register[regx] = sum
       when "5" # SUB Vx, Vy: Register X - Register Y, store in Register X
+        if @debug
+          puts("SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}")
+        end        
         if @register[regx] > @register[regy]
           @register[15] = 1
         else
@@ -195,9 +213,15 @@ class CPU
         end
         @register[regx] = @register[regx] - @register[regy]
       when "6" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
+        if @debug
+          puts("SHR V#{regx} (#{@register[regx]})")
+        end        
         @register[15] = @register[regx] & 1
         @register[regx] = @register[regx] / 2
       when "7" # SUBN Vx, Vy: Register Y - Register X, store in Register X
+        if @debug
+          puts("SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}")
+        end        
         if @register[regy] > @register[regx]
           @register[15] = 1
         else
@@ -206,6 +230,9 @@ class CPU
         end
         @register[regx] = @register[regy] - @register[regx]
       when "e" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
+        if @debug
+          puts("SHL V#{regx} (#{@register[regx]})")
+        end
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
       end
@@ -215,8 +242,14 @@ class CPU
       if @register[regx] != @register[regy]
         @pc += 2
       end
+      if @debug
+        puts("SNE V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]})")
+      end      
     when "a" # LD I, Addr: Load value Addr into Register I
-      @I = opcode[1,3].to_i(16)
+      @i = opcode[1,3].to_i(16)
+      if @debug
+        puts("LD I,  #{@i.to_s(16).rjust(4, "0")}")
+      end
     when "b" # JMP V0 NNN: Jump to address V0 + NNN
       address = opcode[1,3].to_i(16)
       @pc = address + @register[0]
@@ -226,14 +259,17 @@ class CPU
       byte = rand(256) & const
       @register[regx] = byte
     when "d" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
-      # Coordinate: Vx, Vy53279
+      # Coordinate: Vx, Vy
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
-      n    = opcode[3,1].to_i(16) -1
+      n    = opcode[3,1].to_i(16) #-1
       sprite = []
       (0..n).each do |offset|
         sprite << readbyte(@i + offset)[0,2].to_i
       end
+      if @debug
+        puts("DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})")
+      end      
       #puts(regx, @register[regx], regy, @register[regy], sprite)
       if @display.writesprite(@register[regx], @register[regy], sprite, 0)
         @register[15] = 1
