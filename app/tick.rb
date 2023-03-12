@@ -1,4 +1,5 @@
 def initialize args
+  args.state.run ||= false
   args.state.display ||=  Display.new({margin_bottom:256})
   args.state.keyboard ||= Keyboard.new()
   args.state.cpu ||= CPU.new(args.state.display)
@@ -23,7 +24,11 @@ def tick args
     args.state.keyboard.keyup key
   end
 
-  if args.inputs.keyboard.key_down.s
+  if args.inputs.keyboard.key_down.r
+    args.state.run = !args.state.run
+  end
+
+  if args.inputs.keyboard.key_down.s or args.state.run
     args.state.cpu.tick args.state.keyboard
   end
   if args.inputs.keyboard.key_down.q

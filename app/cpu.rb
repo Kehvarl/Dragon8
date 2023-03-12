@@ -258,13 +258,16 @@ class CPU
       const = opcode[2,2].to_i(16)
       byte = rand(256) & const
       @register[regx] = byte
+      if @debug
+        puts("RND and #{const} (#{byte.to_s(16).rjust(4, "0")}")
+      end
     when "d" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
       # Coordinate: Vx, Vy
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
       n    = opcode[3,1].to_i(16) -1
       sprite = []
-      (0..n).each do |offset|
+      (0..n).each do |offset| 
         sprite << readbyte(@i + offset).to_i(16)
       end
       if @debug
