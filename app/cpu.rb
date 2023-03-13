@@ -59,17 +59,21 @@ class CPU
     end
     
     (0..@ticks_per_frame).each do
-      step
+      debug_msg = step
+      if @debug
+        puts(debug_msg)
+      end
     end
   end
 
   def step
     p = @pc
     op = fetch
+    debug_msg = ""
     if @debug
-      puts("#{p.to_s(16).rjust(4,"0")}: #{op}")
+      debug_msg += "#{p.to_s(16).rjust(4,"0")}: #{op}\n" 
     end
-    decode(op)
+    (debug_msg + decode(op))
   end
 
   def readbyte address
@@ -90,70 +94,55 @@ class CPU
   end
 
   def decode opcode
+    debug_msg = ""
     op = opcode[0]
     case op
     when "0"
       if opcode[1] != "0" # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif opcode == "00e0" # CLS: Clear Screen
-        if @debug
-          puts("Clearing Screen")
-        end
+        debug_msg += "Clearing Screen\n"
         @display.clear()
       elsif opcode == "00ee" # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
-        if @debug
-          puts("Return to #{@pc}")
-        end
+        debug_msg += "Return to #{@pc}\n"
       end
     when "1" # JMP NNN: Jump to address NNN
       address = opcode[1,3].to_i(16)
-      if @debug
-        puts("JMP To #{address.to_s(16).rjust(4, "0")}")
-      end
+      debug_msg += "JMP To #{address.to_s(16).rjust(4, "0")}\n"
       @pc = address
     when "2" # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
       address = opcode[1,3].to_i(16)
       @pc = address
-      if @debug
-        puts("CALL #{address}")
-      end
+      debug_msg ++ "CALL #{address}\n"
     when "3" # SE Vx, kk: Skip Next If Register X Equals Value KK
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
       if @register[reg] == val
         @pc += 2
       end
-      if @debug
-        puts("SE Vx #{@register[reg]} == #{val}")
-      end
+      debug_msg += "SE Vx #{@register[reg]} == #{val}\n"
     when "4" # SNE Vx, kk: kip Next If Register X Not Equals Value KK
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
       if @register[reg] != val
         @pc += 2
       end
-      if @debug
-        puts("SNE Vx #{@register[reg]} != @{val}")
-      end
+      debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
     when "5" # SE Vx, Vy: Skip Next If Register X Equals Register Y
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
       if @register[regx] == @register[regy]
         @pc += 2
       end
-      if @debug
-        puts("SE Vx #{@register[regx]} == Vy#{@register[regy]}")        
-      end
+      debug_msg += "SE Vx #{@register[regx]} == Vy#{@register[regy]}\n"
     when "6" # LD Vx, kk: Load Value kk into Register X
       reg = opcode[1,1].to_i(16)
       val = opcode[2,2].to_i(16)
-      if @debug
-        puts("LD V#{reg} = 0x#{opcode[2,2]} : #{val}")
-      end
+      debug_msg += "LD V#{reg} = 0x#{opcode[2,2]} : #{val}\n"
       @register[reg] = val
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
       reg = opcode[1,1].to_i(16)
@@ -163,38 +152,26 @@ class CPU
         @register[15] = 1
       end
       @register[reg] += val
-      if @debug
-        puts("ADD V#{reg}, #{val}")        
-      end
+      debug_msg += "ADD V#{reg}, #{val}\n"
     when "8" # Register X,Y functions
       regx = opcode[1,1].to_i(16)
       regy = opcode[2,1].to_i(16)
       operation = opcode[3,1].to_i
       case operation
       when "0" # LD Vx, Vy: Load Value from Register Y into Register X
-        if @debug
-          puts("LD V#{regx}, V#{regy} (#{@register[regy]})")
-        end
+        debug_msg += "LD V#{regx}, V#{regy} (#{@register[regy]})\n"
         @register[regx] = @register[regy]
       when "1" # OR Vx, Vy: Register X OR Register Y, store in Register X
-        if @debug
-          puts("OR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] | @register[regy]}")
-        end
+        debug_msg += "OR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] | @register[regy]}\n"
         @register[regx] = @register[regx] | @register[regy]        
       when "2" # AND Vx, Vy: Register X AND Register Y, store in Register X
-        if @debug
-          puts("AND V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] & @register[regy]}")
-        end
+        debug_msg += "AND V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] & @register[regy]}\n"
         @register[regx] = @register[regx] & @register[regy]        
       when "3" # XOR Vx, Vy: Register X XOR Register Y, store in Register X
-        if @debug
-          puts("XOR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] ^ @register[regy]}")
-        end        
+        debug_msg += "XOR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] ^ @register[regy]}\n"
         @register[regx] = @register[regx] ^ @register[regy]
       when "4" # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
-        if @debug
-          puts("ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}")
-        end
+        debug_msg += "ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}\n"
         sum = @register[regx] + @register[regy]
         if sum > 255
           sum -= 255
@@ -202,9 +179,7 @@ class CPU
         end
         @register[regx] = sum
       when "5" # SUB Vx, Vy: Register X - Register Y, store in Register X
-        if @debug
-          puts("SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}")
-        end        
+        debug_msg += "SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}\n"
         if @register[regx] > @register[regy]
           @register[15] = 1
         else
@@ -213,15 +188,11 @@ class CPU
         end
         @register[regx] = @register[regx] - @register[regy]
       when "6" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
-        if @debug
-          puts("SHR V#{regx} (#{@register[regx]})")
-        end        
+        debug_msg += "SHR V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 1
         @register[regx] = @register[regx] / 2
       when "7" # SUBN Vx, Vy: Register Y - Register X, store in Register X
-        if @debug
-          puts("SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}")
-        end        
+        debug_msg += "SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}\n"
         if @register[regy] > @register[regx]
           @register[15] = 1
         else
@@ -230,9 +201,7 @@ class CPU
         end
         @register[regx] = @register[regy] - @register[regx]
       when "e" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
-        if @debug
-          puts("SHL V#{regx} (#{@register[regx]})")
-        end
+        debug_msg ++ "SHL V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
       end
@@ -242,14 +211,10 @@ class CPU
       if @register[regx] != @register[regy]
         @pc += 2
       end
-      if @debug
-        puts("SNE V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]})")
-      end      
+      debug_msg += "SNE V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]})\n"
     when "a" # LD I, Addr: Load value Addr into Register I
       @i = opcode[1,3].to_i(16)
-      if @debug
-        puts("LD I,  #{@i.to_s(16).rjust(4, "0")}")
-      end
+      debug_msg += "LD I,  #{@i.to_s(16).rjust(4, "0")}\n"
     when "b" # JMP V0 NNN: Jump to address V0 + NNN
       address = opcode[1,3].to_i(16)
       @pc = address + @register[0]
@@ -258,9 +223,7 @@ class CPU
       const = opcode[2,2].to_i(16)
       byte = rand(256) & const
       @register[regx] = byte
-      if @debug
-        puts("RND and #{const} (#{byte.to_s(16).rjust(4, "0")}")
-      end
+      debug_msg += "RND and #{const} (#{byte.to_s(16).rjust(4, "0")}\n"
     when "d" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
       # Coordinate: Vx, Vy
       regx = opcode[1,1].to_i(16)
@@ -270,10 +233,7 @@ class CPU
       (0..n).each do |offset| 
         sprite << readbyte(@i + offset).to_i(16)
       end
-      if @debug
-        puts("DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})")
-      end      
-      #puts(regx, @register[regx], regy, @register[regy], sprite)
+      debug_msg += "DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})\n"
       if @display.writesprite(@register[regx], @register[regy], sprite, 0)
         @register[15] = 1
       else
@@ -325,9 +285,9 @@ class CPU
       when "65" # LD Vx, [I]: Load the values from I..I+x into Registers 0 to X
         (0..regx).each do |reg|
           @register[reg] = @memory[@i + reg]
-        end
-        
+        end        
       end
     end
+    debug_msg
   end
 end
