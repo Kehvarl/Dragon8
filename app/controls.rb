@@ -1,20 +1,15 @@
 class Controls
   def initialize args={}
+    @x = args.x || 1184
+    @y = args.y || 256
     @w = args.w || 64
-    @h = args.h || 32
-    @screen_width  = args.screen_width  || 1280
-    @screen_height = args.screen_heignt || 720
-    @margin_top    = args.margin_top    || 64
-    @margin_bottom = args.margin_bottom || 64
-    @margin_left   = args.margin_left   || 64
-    @margin_right  = args.margin_right  || 64
-    @sw = (@screen_width - (@margin_left + @margin_right))/@w
-    @sh = (@screen_height - (@margin_top + @margin_bottom))/@h
+    @h = args.h || 412
   end
 
   def render
     arr = []
-    arr << {x: (1280-96), y: 256, w: 64, h: (720-(256+52)), r:90, g:90, b:90}.solid!
+    arr << {x: @x,  y: @y, w: @w, h: @h, r:90, g:90, b:90}.solid!
+    arr << {x: @x + 5, y: @y+10, w: @w-10, h: 64, r:128, g:0, b:0}.solid!
     arr
   end
 end
