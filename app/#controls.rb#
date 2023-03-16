@@ -10,7 +10,6 @@ class Controls
   end
 
   def monitor_color x, y, w, h
-    
     wi = {x: x, y: y, w: w/3, h:h, **@colors[0]}.solid!
     a = {x: x+(w/3), y: y, w: w/3, h:h, **@colors[1]}.solid!
     g = {x: x+(2*w/3), y: y, w: w/3, h:h, **@colors[2]}.solid!
