@@ -1,3 +1,30 @@
+class Control
+  attr_sprite
+
+  def initialize args={}
+    @x = args.x || 1184
+    @y = args.y || 256
+    @w = args.w || 64
+    @h = args.h || 412
+    @path = args.path || ""
+    @source_x = args.source_x || 0
+    @source_y = args.source_y || 0
+    @source_h = args.source_h || 32
+    @source_w = args.source_w || 16
+    @status = 0
+    @onlick = args.callback || nil
+  end
+
+  def click mouse
+    if args.geometry.intersect_rect? mouse, self
+      if @onclick != nil
+        call @onclick        
+      end
+    end
+  end
+  
+  
+end
 class Controls
   def initialize args={}
     @x = args.x || 1184
@@ -7,6 +34,8 @@ class Controls
 
     @color = 0
     @colors = [{r:255, g:255, b:255}, {r:128, g:128, b:0}, {r:0, g:128, b:0}]
+
+    @run_stop=0
   end
 
   def monitor_color x, y, w, h
