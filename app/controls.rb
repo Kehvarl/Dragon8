@@ -22,9 +22,9 @@ class Control
       end
     end
   end
-  
-  
 end
+
+
 class Controls
   def initialize args={}
     @x = args.x || 1184
