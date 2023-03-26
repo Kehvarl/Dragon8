@@ -51,3 +51,14 @@
 
 **** TODO Controls
 ***** TODO run/stop
+***** TODO step
+***** TODO color select
+***** TODO load
+***** TODO memory edit
+
+**** TODO Memory Editor
+***** TODO Examine Memory
+***** TODO Set Memory
+***** TODO Examine Registers
+***** TODO Set Register
+***** TODO Set PC
