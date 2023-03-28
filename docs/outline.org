@@ -62,3 +62,13 @@
 ***** TODO Examine Registers
 ***** TODO Set Register
 ***** TODO Set PC
+
+**** TODO ROM Loader
+***** TODO Select Load address
+***** TODO Select File
+***** TODO Copy file contents to RAM
+***** TODO RUN ROM
+
+**** TODO Tests
+***** DONE IBM Logo
+***** TODO
