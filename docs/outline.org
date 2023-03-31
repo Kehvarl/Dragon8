@@ -1,4 +1,4 @@
-* Dragon8
+ * Dragon8
 ** CHIP-8 VM in Dragon Ruby
 
 *** Features
@@ -55,6 +55,7 @@
 ***** TODO color select
 ***** TODO load
 ***** TODO memory edit
+***** TODO sprites
 
 **** TODO Memory Editor
 ***** TODO Examine Memory
