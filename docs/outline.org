@@ -63,6 +63,7 @@
 ***** TODO Examine Registers
 ***** TODO Set Register
 ***** TODO Set PC
+***** TODO Stack Editor
 
 **** TODO ROM Loader
 ***** TODO Select Load address
