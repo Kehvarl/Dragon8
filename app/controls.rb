@@ -24,6 +24,12 @@ class Control
   end
 end
 
+# Display Color
+# Run/Stop
+# Step
+# Keyboard
+# ROM
+# Memory/Machine
 
 class Controls
   def initialize args={}
