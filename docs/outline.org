@@ -56,6 +56,10 @@
 ***** TODO load
 ***** TODO memory edit
 ***** TODO sprites
+***** TODO Control Interaction
+****** TODO Register Clicks
+****** TODO Respond Appropriately
+****** TODO Update Game State
 
 **** TODO Memory Editor
 ***** TODO Examine Memory
@@ -74,3 +78,4 @@
 **** TODO Tests
 ***** DONE IBM Logo
 ***** TODO more tests
+
