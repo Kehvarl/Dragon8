@@ -63,7 +63,7 @@ class Controls
   end
   
   def run_stop x, y, w, h
-    {x: x + 5, y: y+10, w: w-10, h: h, r:128, g:0, b:0}.solid!
+    {x: x + 5, y: y+10, w: w-10, h: h, path: "sprites/sw_01.png", source_w:32}.sprite!
   end
 
   def step x, y, w, h
@@ -73,7 +73,7 @@ class Controls
   def render
     arr = []
     arr << {x: @x,  y: @y, w: @w, h: @h, r:90, g:90, b:90}.solid!
-    arr << run_stop(@x, @y+@h-138, @w, 64)
+    arr << run_stop(@x, @y+@h-138, 42, 64)
     arr << monitor_color(@x, @y + @h-37, @w, 32)
     arr << step(@x, @y+@h-232, @w, 64)
     arr
