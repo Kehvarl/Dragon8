@@ -41,7 +41,7 @@ class Controls
     @color = 0
     @colors = [{r:255, g:255, b:255}, {r:128, g:128, b:0}, {r:0, g:128, b:0}]
 
-    @run_stop=0
+    @run_stop=1
   end
 
   def monitor_color x, y, w, h
@@ -63,7 +63,15 @@ class Controls
   end
   
   def run_stop x, y, w, h
-    {x: x + 5, y: y+10, w: w-10, h: h, path: "sprites/sw_01.png", source_w:32}.sprite!
+    case @run_stop
+    when 1
+      sx = 0
+    when 0
+      sx = 32
+    end
+    {x: x + 16, y: y+10, w: w-10, h: h,
+     path: "sprites/switches/run_stop.png",
+     source_w:32, source_x:sx}.sprite!
   end
 
   def step x, y, w, h
