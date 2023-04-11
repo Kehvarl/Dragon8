@@ -1,26 +1,62 @@
 class Control
   attr_sprite
+  attr_reader :status
 
   def initialize args={}
-    @x = args.x || 1184
-    @y = args.y || 256
-    @w = args.w || 64
-    @h = args.h || 412
-    @path = args.path || ""
-    @source_x = args.source_x || 0
+    @x = args.x || 1200
+    @y = args.y || 540
+    @w = args.w || 32
+    @h = args.h || 64
+    @path = args.path ||  "sprites/switches/run_stop_anim.png"
+    @source_x = args.source_x || 128
     @source_y = args.source_y || 0
-    @source_h = args.source_h || 32
-    @source_w = args.source_w || 16
+    @source_h = args.source_h || 64
+    @source_w = args.source_w || 32
     @status = 0
+    @animating = false
+    @sprite_width = 32
+    @held = false
     @onlick = args.callback || nil
   end
 
-  def click mouse
-    if args.geometry.intersect_rect? mouse, self
+  def click args
+    if @animating
+      return
+    end
+    if args.inputs.mouse.inside_rect?(self)
       if @onclick != nil
         call @onclick        
       end
+      @animating = true
     end
+  end
+
+  def tick args  
+    if args.inputs.mouse.button_left and !@held
+      self.click(args)
+      @held = true
+    elsif !args.inputs.mouse.button_left
+      @held = false
+    end
+  
+    if @animating
+      if @status == 1
+        if @source_x < 128
+          @source_x += @sprite_width
+        else
+          @status = 0
+          @animating = false
+        end
+      else
+        if @source_x > 0
+          @source_x -= @sprite_width
+        else
+          @status = 1
+          @animating = false
+        end
+      end
+    end
+    
   end
 end
 
@@ -67,7 +103,7 @@ class Controls
     when 1
       sx = 0
     when 0
-      sx = 32
+      sx = 128
     end
     {x: x + 16, y: y+10, w: w-10, h: h,
      path: "sprites/switches/run_stop.png",
@@ -81,7 +117,7 @@ class Controls
   def render
     arr = []
     arr << {x: @x,  y: @y, w: @w, h: @h, r:90, g:90, b:90}.solid!
-    arr << run_stop(@x, @y+@h-138, 42, 64)
+    # arr << run_stop(@x, @y+@h-138, 42, 64)
     arr << monitor_color(@x, @y + @h-37, @w, 32)
     arr << step(@x, @y+@h-232, @w, 64)
     arr
