@@ -1,7 +1,7 @@
 def initialize args
   args.state.run ||= false
   args.state.display ||=  Display.new({margin_right: 128, margin_bottom:256})
-  args.state.controls ||= Controls.new()
+  args.state.controls ||= RunStop.new()
   args.state.rs = Control.new({})
   args.state.keyboard ||= Keyboard.new()
   args.state.cpu ||= CPU.new(args.state.display)
