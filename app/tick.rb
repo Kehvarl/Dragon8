@@ -1,7 +1,11 @@
+def runstop args
+  args.state.run != args.state.run
+end
+
 def initialize args
   args.state.run ||= false
   args.state.display ||=  Display.new({margin_right: 128, margin_bottom:256})
-  args.state.controls ||= RunStop.new()
+  args.state.controls ||= RunStop.new() #{onclick: Proc.new{runstop(args)}})
   args.state.rs = Control.new({})
   args.state.keyboard ||= Keyboard.new()
   args.state.cpu ||= CPU.new(args.state.display)
@@ -34,7 +38,7 @@ def tick args
     args.state.run = !args.state.run
   end
 
-  if args.inputs.keyboard.key_down.s or args.state.run or args.state.rs.status == 1
+  if args.inputs.keyboard.key_down.s or args.state.run#  or args.state.rs.status == 1
     args.state.cpu.tick args.state.keyboard
   end
   if args.inputs.keyboard.key_down.q

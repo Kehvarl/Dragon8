@@ -1,4 +1,4 @@
-class Control
+class RunStop
   attr_sprite
   attr_reader :status
 
@@ -24,9 +24,6 @@ class Control
       return
     end
     if args.inputs.mouse.inside_rect?(self)
-      if @onclick != nil
-        call @onclick        
-      end
       @animating = true
     end
   end
@@ -46,6 +43,9 @@ class Control
         else
           @status = 0
           @animating = false
+          if @onclick != nil
+            call @onclick        
+          end
         end
       else
         if @source_x > 0
@@ -53,10 +53,12 @@ class Control
         else
           @status = 1
           @animating = false
+          if @onclick != nil
+            call @onclick        
+          end
         end
       end
     end
-    
   end
 end
 
