@@ -16,7 +16,7 @@ class RunStop
     @animating = false
     @sprite_width = 32
     @held = false
-    @onlick = args.callback || lambda {puts("test")}
+    @onlick = args.callback || nil
   end
 
   def click args
