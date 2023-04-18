@@ -71,8 +71,8 @@ class Momentary
     @y = args.y || 444
     @w = args.w || 32
     @h = args.h || 64
-    @path = args.path ||  "sprites/switches/run_stop_anim.png"
-    @source_x = args.source_x || 128
+    @path = args.path ||  "sprites/switches/step_anim.png"
+    @source_x = args.source_x || 0
     @source_y = args.source_y || 0
     @source_h = args.source_h || 64
     @source_w = args.source_w || 32
