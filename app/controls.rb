@@ -1,64 +1,3 @@
-class Momentary
-  attr_sprite
-  attr_reader :status
-
-  def initialize args={}
-    @x = args.x || 1200
-    @y = args.y || 444
-    @w = args.w || 32
-    @h = args.h || 64
-    @path = args.path ||  "sprites/switches/step_anim.png"
-    @source_x = args.source_x || 0
-    @source_y = args.source_y || 0
-    @source_h = args.source_h || 64
-    @source_w = args.source_w || 32
-    @status = 0
-    @animating = false
-    @direction = 1
-    @sprite_width = 32
-    @held = false
-    @onlick = args.callback || nil
-  end
-
-  def click args
-    if @animating
-      return
-    end
-    if args.inputs.mouse.inside_rect?(self)
-      @animating = true
-    end
-  end
-
-  def tick args
-    @status = 0
-    
-    if args.inputs.mouse.button_left and !@held
-      self.click(args)
-      @status = 1
-      @held = true
-    elsif !args.inputs.mouse.button_left
-      @held = false
-    end
-  
-    if @animating
-      if @direction == 1
-        if @source_x < 128
-          @source_x += @sprite_width
-        else
-          @direction = 0
-        end
-      else
-        if @source_x > 0
-          @source_x -= @sprite_width
-        else
-          @direction = 1
-          @animating = false
-        end
-      end
-    end
-  end
-end
-
 # Display Color
 # Run/Stop
 # Step
@@ -116,9 +55,13 @@ class Controls
   def render
     arr = []
     arr << {x: @x,  y: @y, w: @w, h: @h, r:90, g:90, b:90}.solid!
-    # arr << run_stop(@x, @y+@h-138, 42, 64)
     arr << monitor_color(@x, @y + @h-37, @w, 32)
-    # arr << step(@x, @y+@h-232, @w, 64)
+    arr << {x: 64, w: @y-24, text:"Address"}.label!
+    arr << {x: 64, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 84, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 104, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 124, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+
     arr
   end
 end
