@@ -56,11 +56,17 @@ class Controls
     arr = []
     arr << {x: @x,  y: @y, w: @w, h: @h, r:90, g:90, b:90}.solid!
     arr << monitor_color(@x, @y + @h-37, @w, 32)
-    arr << {x: 64, w: @y-24, text:"Address"}.label!
+    arr << {x: 64, y: @y-48, w: 96, h: 24, path: "sprites/label_mem.png", source_w: 64, source_h: 16}.sprite!    
     arr << {x: 64, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
     arr << {x: 84, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
     arr << {x: 104, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
     arr << {x: 124, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+
+    arr << {x: 164, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 184, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 204, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    arr << {x: 224, y: @y-76, w: 16, h: 16, path: "sprites/led_red.png", source_w: 32, source_h: 32}.sprite!
+    
 
     arr
   end
