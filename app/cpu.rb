@@ -35,10 +35,11 @@ class CPU
   def set pgm, start=0x200
     addr = start
     pgm.each do |op|
-      a = op[0,2]
-      b = op[2,2]
-      @memory[addr] = a.to_i(16)
-      @memory[addr+1] = b.to_i(16)
+      a = (op & 0xff00) >> 8 # Read first byte, shift right to treat as 1 byte
+      b = op & 0x00ff        # Read second byte
+      puts op, a, b
+      @memory[addr] = a
+      @memory[addr+1] = b
       addr += 2
     end
     @pc = start
