@@ -37,7 +37,6 @@ class CPU
     pgm.each do |op|
       a = (op & 0xff00) >> 8 # Read first byte, shift right to treat as 1 byte
       b = op & 0x00ff        # Read second byte
-      puts op, a, b
       @memory[addr] = a
       @memory[addr+1] = b
       addr += 2
@@ -86,63 +85,68 @@ class CPU
   end
 
   def fetch
-    opcode = readbyte(@pc) + readbyte(@pc + 1)
+    op1 = @memory[@pc] #readbyte(@pc)
+    op2 = @memory[@pc +1] #readbyte(@pc + 1)
     @pc += 2
     if @pc > 4096
       @pc = 0
     end
-    opcode
+    ((op1 << 8) + op2)
   end
 
   def decode opcode
     debug_msg = ""
-    op = opcode[0]
+    op = (opcode & 0xf000) >> 12
+    rest = (opcode & 0x0fff)
+    opcode = opcode.to_s(16).rjust(0,4)
+    op = op.to_s(16)
+    puts op
     case op
     when "0"
-      if opcode[1] != "0" # SYS NNN: Call System Routine NNN
+      if rest != 0 # SYS NNN: Call System Routine NNN
       # Execute Call Statment
-      elsif opcode == "00e0" # CLS: Clear Screen
+      elsif rest == 0x0e0 # CLS: Clear Screen
         debug_msg += "Clearing Screen\n"
         @display.clear()
-      elsif opcode == "00ee" # RTN: Return from Subroutine
+      elsif rest == 0x0ee # RTN: Return from Subroutine
         @pc = @stack[@sp]
         @sp -= 1
         debug_msg += "Return to #{@pc}\n"
       end
     when "1" # JMP NNN: Jump to address NNN
-      address = opcode[1,3].to_i(16)
+      address = rest
       debug_msg += "JMP To #{address.to_s(16).rjust(4, "0")}\n"
       @pc = address
     when "2" # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
-      address = opcode[1,3].to_i(16)
+      address = rest
       @pc = address
       debug_msg ++ "CALL #{address}\n"
     when "3" # SE Vx, kk: Skip Next If Register X Equals Value KK
-      reg = opcode[1,1].to_i(16)
-      val = opcode[2,2].to_i(16)
+      reg = (rest & 0xf00) >> 8
+      val = (rest & 0x0ff)
       if @register[reg] == val
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[reg]} == #{val}\n"
     when "4" # SNE Vx, kk: kip Next If Register X Not Equals Value KK
-      reg = opcode[1,1].to_i(16)
-      val = opcode[2,2].to_i(16)
+      reg = (rest & 0xf00) >> 8
+      val = (rest & 0x0ff)
       if @register[reg] != val
         @pc += 2
       end
       debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
     when "5" # SE Vx, Vy: Skip Next If Register X Equals Register Y
-      regx = opcode[1,1].to_i(16)
-      regy = opcode[2,1].to_i(16)
+      regx = (rest & 0xf00) >> 8
+      regy = (rest & 0x0f0) >> 4      
       if @register[regx] == @register[regy]
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[regx]} == Vy#{@register[regy]}\n"
     when "6" # LD Vx, kk: Load Value kk into Register X
-      reg = opcode[1,1].to_i(16)
-      val = opcode[2,2].to_i(16)
+      reg = (rest & 0xf00) >> 8
+      val = (rest & 0x0ff)
       debug_msg += "LD V#{reg} = 0x#{opcode[2,2]} : #{val}\n"
       @register[reg] = val
     when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
