@@ -104,6 +104,7 @@ class CPU
     rest = (opcode & 0x0fff)
     opcode = opcode.to_s(16).rjust(0,4)
     case op
+        
     when 0x0
       if rest != 0 # SYS NNN: Call System Routine NNN
       # Execute Call Statment
@@ -115,38 +116,45 @@ class CPU
         @sp -= 1
         debug_msg += "Return to #{@pc}\n"
       end
+      
     when 0x1 # JMP NNN: Jump to address NNN
       address = rest
       debug_msg += "JMP To #{address.to_s(16).rjust(4, "0")}\n"
       @pc = address
+      
     when 0x2 # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
       address = rest
       @pc = address
       debug_msg ++ "CALL #{address}\n"
+      
     when 0x3 # SE Vx, kk: Skip Next If Register X Equals Value KK
       reg, val = rv_decode(rest)
       if @register[reg] == val
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[reg]} == #{val}\n"
+      
     when 0x4 # SNE Vx, kk: kip Next If Register X Not Equals Value KK
       reg, val = rv_decode(rest)
       if @register[reg] != val
         @pc += 2
       end
       debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
+      
     when 0x5 # SE Vx, Vy: Skip Next If Register X Equals Register Y
       regx, regy = rxry_decode(rest)  
       if @register[regx] == @register[regy]
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[regx]} == Vy#{@register[regy]}\n"
+      
     when 0x6 # LD Vx, kk: Load Value kk into Register X
       reg, val = rv_decode(rest)
       debug_msg += "LD V#{reg} = 0x#{opcode[2,2]} : #{val}\n"
       @register[reg] = val
+      
     when 0x7 # ADD Vx, kk: Add KK to Register X, store in Register X
       reg, val = rv_decode(rest)
       if @register[reg] + val > 255
@@ -155,22 +163,28 @@ class CPU
       end
       @register[reg] += val
       debug_msg += "ADD V#{reg}, #{val}\n"
+      
     when 0x8 # Register X,Y functions
       regx, regy = rxry_decode(rest)
       operation = rest & 0x00f
       case operation
+          
       when 0x0 # LD Vx, Vy: Load Value from Register Y into Register X
         debug_msg += "LD V#{regx}, V#{regy} (#{@register[regy]})\n"
         @register[regx] = @register[regy]
+        
       when 0x1 # OR Vx, Vy: Register X OR Register Y, store in Register X
         debug_msg += "OR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] | @register[regy]}\n"
-        @register[regx] = @register[regx] | @register[regy]        
+        @register[regx] = @register[regx] | @register[regy]
+        
       when 0x2 # AND Vx, Vy: Register X AND Register Y, store in Register X
         debug_msg += "AND V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] & @register[regy]}\n"
-        @register[regx] = @register[regx] & @register[regy]        
+        @register[regx] = @register[regx] & @register[regy]
+        
       when 0x3 # XOR Vx, Vy: Register X XOR Register Y, store in Register X
         debug_msg += "XOR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] ^ @register[regy]}\n"
         @register[regx] = @register[regx] ^ @register[regy]
+        
       when 0x4 # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
         debug_msg += "ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}\n"
         sum = @register[regx] + @register[regy]
@@ -179,6 +193,7 @@ class CPU
           @register[15] = 1
         end
         @register[regx] = sum
+        
       when 0x5 # SUB Vx, Vy: Register X - Register Y, store in Register X
         debug_msg += "SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}\n"
         if @register[regx] > @register[regy]
@@ -188,10 +203,12 @@ class CPU
           @register[regx] += 256
         end
         @register[regx] = @register[regx] - @register[regy]
+        
       when 0x6 # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
         debug_msg += "SHR V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 1
         @register[regx] = @register[regx] / 2
+        
       when 0x7 # SUBN Vx, Vy: Register Y - Register X, store in Register X
         debug_msg += "SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}\n"
         if @register[regy] > @register[regx]
@@ -201,28 +218,34 @@ class CPU
           @register[regy] += 256
         end
         @register[regx] = @register[regy] - @register[regx]
+        
       when 0xe # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
         debug_msg ++ "SHL V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
       end
+      
     when 0x9 # SNE Vx, Vy: Skip Next If Register X Not Equal To Register Y
       regx, regy = rxry_decode(rest)
       if @register[regx] != @register[regy]
         @pc += 2
       end
       debug_msg += "SNE V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]})\n"
+      
     when 0xa # LD I, Addr: Load value Addr into Register I
       @i = rest
       debug_msg += "LD I,  #{@i.to_s(16).rjust(4, "0")}\n"
+      
     when 0xb # JMP V0 NNN: Jump to address V0 + NNN
       address = rest
       @pc = address + @register[0]
+      
     when 0xc # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
       regx, cost = rv_decode(rest)
       byte = rand(256) & const
       @register[regx] = byte
       debug_msg += "RND and #{const} (#{byte.to_s(16).rjust(4, "0")}\n"
+      
     when 0xd # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
       # Coordinate: Vx, Vy
       regx, regy = rxry_decode(rest)
@@ -237,6 +260,7 @@ class CPU
       else
         @register[15] = 0
       end
+      
     when 0xe # Keyboard Commands
       regx = (rest & 0xf00) >> 8
       operation = rest & 0x0ff
@@ -250,6 +274,7 @@ class CPU
           @pc += 2
         end
       end
+      
     when 0xf # Timer Commands
       regx = (rest & 0xf00) >> 8
       operation = rest & 0x0ff
