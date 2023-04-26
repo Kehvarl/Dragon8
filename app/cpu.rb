@@ -76,12 +76,16 @@ class CPU
     (debug_msg + decode(op))
   end
 
-  def readbyte address
-    @memory[address].to_s(16).rjust(2,"0")
+  def rv_decode rest
+    reg = (rest & 0xf00) >> 8
+    val = (rest & 0x0ff)    
+    [reg, val]
   end
 
-  def readregister reg
-    @register[reg].to_s(16).rjust(2, "0")
+  def rxry_decode rest
+    regx = (rest & 0xf00) >> 8
+    regy = (rest & 0x0f0) >> 4
+    [regx, regy]
   end
 
   def fetch
@@ -99,10 +103,8 @@ class CPU
     op = (opcode & 0xf000) >> 12
     rest = (opcode & 0x0fff)
     opcode = opcode.to_s(16).rjust(0,4)
-    op = op.to_s(16)
-    puts op
     case op
-    when "0"
+    when 0x0
       if rest != 0 # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif rest == 0x0e0 # CLS: Clear Screen
@@ -113,69 +115,63 @@ class CPU
         @sp -= 1
         debug_msg += "Return to #{@pc}\n"
       end
-    when "1" # JMP NNN: Jump to address NNN
+    when 0x1 # JMP NNN: Jump to address NNN
       address = rest
       debug_msg += "JMP To #{address.to_s(16).rjust(4, "0")}\n"
       @pc = address
-    when "2" # CALL NNN: Go to subroutine at address NNN
+    when 0x2 # CALL NNN: Go to subroutine at address NNN
       @sp += 1
       @stack[@sp] = @pc
       address = rest
       @pc = address
       debug_msg ++ "CALL #{address}\n"
-    when "3" # SE Vx, kk: Skip Next If Register X Equals Value KK
-      reg = (rest & 0xf00) >> 8
-      val = (rest & 0x0ff)
+    when 0x3 # SE Vx, kk: Skip Next If Register X Equals Value KK
+      reg, val = rv_decode(rest)
       if @register[reg] == val
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[reg]} == #{val}\n"
-    when "4" # SNE Vx, kk: kip Next If Register X Not Equals Value KK
-      reg = (rest & 0xf00) >> 8
-      val = (rest & 0x0ff)
+    when 0x4 # SNE Vx, kk: kip Next If Register X Not Equals Value KK
+      reg, val = rv_decode(rest)
       if @register[reg] != val
         @pc += 2
       end
       debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
-    when "5" # SE Vx, Vy: Skip Next If Register X Equals Register Y
-      regx = (rest & 0xf00) >> 8
-      regy = (rest & 0x0f0) >> 4      
+    when 0x5 # SE Vx, Vy: Skip Next If Register X Equals Register Y
+      regx, regy = rxry_decode(rest)  
       if @register[regx] == @register[regy]
         @pc += 2
       end
       debug_msg += "SE Vx #{@register[regx]} == Vy#{@register[regy]}\n"
-    when "6" # LD Vx, kk: Load Value kk into Register X
-      reg = (rest & 0xf00) >> 8
-      val = (rest & 0x0ff)
+    when 0x6 # LD Vx, kk: Load Value kk into Register X
+      reg, val = rv_decode(rest)
       debug_msg += "LD V#{reg} = 0x#{opcode[2,2]} : #{val}\n"
       @register[reg] = val
-    when "7" # ADD Vx, kk: Add KK to Register X, store in Register X
-      reg = opcode[1,1].to_i(16)
-      val = opcode[2,2].to_i(16)
+    when 0x7 # ADD Vx, kk: Add KK to Register X, store in Register X
+      reg, val = rv_decode(rest)
       if @register[reg] + val > 255
         val -= 255
         @register[15] = 1
       end
       @register[reg] += val
       debug_msg += "ADD V#{reg}, #{val}\n"
-    when "8" # Register X,Y functions
-      regx = opcode[1,1].to_i(16)
-      regy = opcode[2,1].to_i(16)
-      operation = opcode[3,1].to_i
+    when 0x8 # Register X,Y functions
+      regx, regy = rxry_decode(rest)
+      operation = rest & 0x00f
       case operation
-      when "0" # LD Vx, Vy: Load Value from Register Y into Register X
+      when 0x0 # LD Vx, Vy: Load Value from Register Y into Register X
         debug_msg += "LD V#{regx}, V#{regy} (#{@register[regy]})\n"
         @register[regx] = @register[regy]
-      when "1" # OR Vx, Vy: Register X OR Register Y, store in Register X
+      when 0x1 # OR Vx, Vy: Register X OR Register Y, store in Register X
         debug_msg += "OR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] | @register[regy]}\n"
         @register[regx] = @register[regx] | @register[regy]        
-      when "2" # AND Vx, Vy: Register X AND Register Y, store in Register X
+      when 0x2 # AND Vx, Vy: Register X AND Register Y, store in Register X
         debug_msg += "AND V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] & @register[regy]}\n"
         @register[regx] = @register[regx] & @register[regy]        
-      when "3" # XOR Vx, Vy: Register X XOR Register Y, store in Register X
+      when 0x3 # XOR Vx, Vy: Register X XOR Register Y, store in Register X
         debug_msg += "XOR V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] ^ @register[regy]}\n"
         @register[regx] = @register[regx] ^ @register[regy]
-      when "4" # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
+      when 0x4 # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
         debug_msg += "ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}\n"
         sum = @register[regx] + @register[regy]
         if sum > 255
@@ -183,7 +179,7 @@ class CPU
           @register[15] = 1
         end
         @register[regx] = sum
-      when "5" # SUB Vx, Vy: Register X - Register Y, store in Register X
+      when 0x5 # SUB Vx, Vy: Register X - Register Y, store in Register X
         debug_msg += "SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}\n"
         if @register[regx] > @register[regy]
           @register[15] = 1
@@ -192,11 +188,11 @@ class CPU
           @register[regx] += 256
         end
         @register[regx] = @register[regx] - @register[regy]
-      when "6" # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
+      when 0x6 # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
         debug_msg += "SHR V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 1
         @register[regx] = @register[regx] / 2
-      when "7" # SUBN Vx, Vy: Register Y - Register X, store in Register X
+      when 0x7 # SUBN Vx, Vy: Register Y - Register X, store in Register X
         debug_msg += "SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}\n"
         if @register[regy] > @register[regx]
           @register[15] = 1
@@ -205,38 +201,35 @@ class CPU
           @register[regy] += 256
         end
         @register[regx] = @register[regy] - @register[regx]
-      when "e" # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
+      when 0xe # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
         debug_msg ++ "SHL V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2        
       end
-    when "9" # SNE Vx, Vy: Skip Next If Register X Not Equal To Register Y
-      regx = opcode[1,1].to_i(16)
-      regy = opcode[2,1].to_i(16)
+    when 0x9 # SNE Vx, Vy: Skip Next If Register X Not Equal To Register Y
+      regx, regy = rxry_decode(rest)
       if @register[regx] != @register[regy]
         @pc += 2
       end
       debug_msg += "SNE V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]})\n"
-    when "a" # LD I, Addr: Load value Addr into Register I
-      @i = opcode[1,3].to_i(16)
+    when 0xa # LD I, Addr: Load value Addr into Register I
+      @i = rest
       debug_msg += "LD I,  #{@i.to_s(16).rjust(4, "0")}\n"
-    when "b" # JMP V0 NNN: Jump to address V0 + NNN
-      address = opcode[1,3].to_i(16)
+    when 0xb # JMP V0 NNN: Jump to address V0 + NNN
+      address = rest
       @pc = address + @register[0]
-    when "c" # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
-      regx = opcode[1,1].to_i(16)
-      const = opcode[2,2].to_i(16)
+    when 0xc # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
+      regx, cost = rv_decode(rest)
       byte = rand(256) & const
       @register[regx] = byte
       debug_msg += "RND and #{const} (#{byte.to_s(16).rjust(4, "0")}\n"
-    when "d" # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
+    when 0xd # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
       # Coordinate: Vx, Vy
-      regx = opcode[1,1].to_i(16)
-      regy = opcode[2,1].to_i(16)
-      n    = opcode[3,1].to_i(16) -1
+      regx, regy = rxry_decode(rest)
+      n = rest & 0x00f      
       sprite = []
       (0..n).each do |offset| 
-        sprite << readbyte(@i + offset).to_i(16)
+        sprite << @memory[@i + offset]
       end
       debug_msg += "DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})\n"
       if @display.writesprite(@register[regx], @register[regy], sprite, 0)
@@ -244,50 +237,50 @@ class CPU
       else
         @register[15] = 0
       end
-    when "e" # Keyboard Commands
-      regx = opcode[1,1].to_i(16)
-      operation = opcode[2,2]
+    when 0xe # Keyboard Commands
+      regx = (rest & 0xf00) >> 8
+      operation = rest & 0x0ff
       case operation
-      when "9e" # SKP Vx: Skip next operation if Key Vx is held
+      when 0x9e # SKP Vx: Skip next operation if Key Vx is held
         if @keydown == @register[regx]
           @pc += 2
         end
-      when "a1" # SKNP Vx: Skip next operation if Key Vx is not held
+      when 0xa1 # SKNP Vx: Skip next operation if Key Vx is not held
         if @keydown != @register[regx]
           @pc += 2
         end
       end
-    when "f" # Timer Commands
-      regx = opcode[1,1].to_i(16)
-      operation = opcode[2,2]
+    when 0xf # Timer Commands
+      regx = (rest & 0xf00) >> 8
+      operation = rest & 0x0ff
       case operation
-      when "07" # LD Vx, DT: Load the value from the Delay Timer into  Register X
+      when 0x07 # LD Vx, DT: Load the value from the Delay Timer into  Register X
         @register[regx] = @delay
-      when "0a" # LD Vx, K: Load pressed key into Register X
+      when 0x0a # LD Vx, K: Load pressed key into Register X
         @keycapture = true
         @keytarget = regx
-      when "15" # LD DS, Vx: Load the value from Register X into the Delay Timer
+      when 0x15 # LD DS, Vx: Load the value from Register X into the Delay Timer
         @delay = @register[regx]
-      when "18" # LD ST, Vx: Load the value from Register X into the Sound Timer
+      when 0x18 # LD ST, Vx: Load the value from Register X into the Sound Timer
         @sound = @register[regx]
-      when "1e" # Add I, Vx: Add the value from Register X to the value in I. Store in I
+      when 0x1e # Add I, Vx: Add the value from Register X to the value in I. Store in I
         if @i + @register[regx] > 255
           @i -= 255
           @register[15] = 1
         end
         @i += @register[regx]
-      when "29" # LD F, Vx: Load address of sprite for value Vx into I
+      when 0x29 # LD F, Vx: Load address of sprite for value Vx into I
         @i = @symbol[@register[regx]]
-      when "33" # LD B, Vx: Load the BCD Representation of value in Register X into memory
+      when 0x33 # LD B, Vx: Load the BCD Representation of value in Register X into memory
         val = @resgister[regx].to_s(10).rjust(2, "0")
         @memory[@i] = val[0].to_i(10)
         @memory[@i+1] = val[1].to_i(10)
         @memory[@i+2] = val[2].to_i(10)
-      when "55" # LD [I], Vx: Store the values in Registers 0 through X in memory
+      when 0x55 # LD [I], Vx: Store the values in Registers 0 through X in memory
         (0..regx).each do |reg|
           @memory[@i + reg] = @register[reg]
         end
-      when "65" # LD Vx, [I]: Load the values from I..I+x into Registers 0 to X
+      when 0x65 # LD Vx, [I]: Load the values from I..I+x into Registers 0 to X
         (0..regx).each do |reg|
           @register[reg] = @memory[@i + reg]
         end        
