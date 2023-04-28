@@ -313,4 +313,26 @@ class CPU
     end
     debug_msg
   end
+
+  def serialize
+    {
+      debug: debug,
+      ticks_per_frame: ticks_per_frame,
+      register: register,
+      i: i, pc: pc,
+      memory: memory,
+      sp: sp,
+      stack: stack,
+      delay: delay,
+      sound: sound
+    }
+  end
+
+  def inspect
+    serialize.to_s
+  end
+
+  def to_s
+    serialize.to_s
+  end  
 end
