@@ -138,5 +138,22 @@ class Display
   def next_screen_buffer
     @screen_buffers[next_buffer]    
   end
+
+  def serialize
+    {
+      w: @w,
+      h: @h,
+      screen_buffers: @screen_buffers,
+      current_buffer: @current_buffer
+    }
+  end
+
+  def inspect
+    serialize.to_s
+  end
+
+  def to_s
+    serialize.to_s
+  end
   
- end
+end
