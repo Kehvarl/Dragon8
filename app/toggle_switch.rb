@@ -1,6 +1,6 @@
 class Toggle_Switch
   attr_sprite
-  attr_reader :status
+  attr_accessor :status
 
   def initialize args={}
     @x = args.x || 1200
@@ -23,13 +23,11 @@ class Toggle_Switch
     if @animating
       return
     end
-    if args.inputs.mouse.inside_rect?(self)
-      @animating = true
-    end
+    @animating = true
   end
 
   def tick args  
-    if args.inputs.mouse.button_left and !@held
+    if !@held and (args.inputs.mouse.button_left and args.inputs.mouse.inside_rect?(self)) or args.inputs.keyboard.key_down.r
       self.click(args)
       @held = true
     elsif !args.inputs.mouse.button_left
