@@ -86,9 +86,9 @@ class Display
     if buffer == nil
       buffer = next_buffer      
     end
-    b = byte.to_s(2).rjust(8, "0")
-    b.each_char.with_index do |char, index|
-      if xorpixel(x+index, y, char=="1", buffer)
+    7.step(0,-1).each_with_index do |index, bit|
+      puts byte, bit, (1<<bit), byte & (1<<bit)
+      if xorpixel(x+index, y, byte & (1<<bit) == (1<<bit), buffer)
         any_set_to_unset = true
       end
     end
