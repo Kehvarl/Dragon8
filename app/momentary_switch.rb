@@ -59,13 +59,3 @@ class Momentary
   end
 end
 
-class Step < Momentary
-  def initialize args={}
-    super args
-    @x = args.x || 1200
-    @y = args.y || 444
-    @w = args.w || 32
-    @h = args.h || 64
-    @path = args.path ||  "sprites/switches/step_anim.png"
-  end
-end
