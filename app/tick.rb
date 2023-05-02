@@ -44,7 +44,7 @@ def tick args
   args.state.rs.tick args
   args.state.s.tick args
   
-  args.outputs.primitives << {x:0, y:0, w:1280, h:720, r:128, g:128, b:128}.solid!
+  args.outputs.primitives << {x:0, y:0, w:1280, h:720, path:"sprites/console.png"}.sprite!
   args.outputs.primitives << args.state.controls.render
   args.outputs.primitives << args.state.display.screen
   args.outputs.primitives << args.state.rs
@@ -60,7 +60,7 @@ def tick args
 
   if args.inputs.keyboard.key_down.r
     #args.state.run = !args.state.run
-    args.state.rs.click({shortcut: true})
+    args.state.rs.click(args)
   end
 
   if args.inputs.keyboard.key_down.s or args.state.run or args.state.rs.status == 1 or args.state.s.status == 1
