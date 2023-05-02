@@ -28,7 +28,7 @@ class Display
           w: @sw,
           h: @sh,
           path: :pixel,
-          a: 255,
+          a: 0,
           r: 0,
           g: 0,
           b: 0,
@@ -56,6 +56,12 @@ class Display
     @screen_buffers[buffer][y][x].r = r
     @screen_buffers[buffer][y][x].g = g
     @screen_buffers[buffer][y][x].b = b
+    if r+g+b ==0
+      @screen_buffers[buffer][y][x].a = 0
+    else
+      @screen_buffers[buffer][y][x].a = 255
+      
+    end
   end
 
   # Set a specific pixel
