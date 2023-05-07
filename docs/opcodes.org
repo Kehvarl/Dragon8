@@ -2,17 +2,17 @@
 * OPCODES
 
 ** SYSTEM
-:0nnn_SYS_addr:
+:0nnn-SYS_addr:
 Jump to a machine code routine at nnn.
 This instruction is only used on the old computers on which Chip-8 was
 originally implemented. It is ignored by modern interpreters.
 :END:
 
-:00E0_CLS:
+:00E0-CLS:
 Clear the display.
 :END:
 
-:00EE_RET:
+:00EE-RET:
 Return from a subroutine.
 The interpreter sets the program counter to the address at the top of the
 stack, then subtracts 1 from the stack pointer.
@@ -20,20 +20,26 @@ stack, then subtracts 1 from the stack pointer.
 # SP -= 1
 :END:
 
-*** 1nnn - JP addr
-**** Jump to location nnn.
-**** The interpreter sets the program counter to nnn.
+:1nnn-JP_addr:
+Jump to location nnn.
+The interpreter sets the program counter to nnn.
+:END:
 
-*** 2nnn - CALL addr
-**** Call subroutine at nnn.
-**** The interpreter increments the stack pointer, then puts the current PC on
-**** the top of the stack.
-**** The PC is then set to nnn.
+:2nnn-CALL_addr:
+Call subroutine at nnn.
+The interpreter increments the stack pointer, then puts the current PC on
+the top of the stack. The PC is then set to nnn.
+# SP += 1
+# Stack[SP] = PC
+# PC = nnn
+:END:
 
-*** 3xkk - SE Vx, byte
-**** Skip next instruction if Vx = kk.
-**** The interpreter compares register Vx to kk, and if they are equal,
-**** increments the program counter by 2.
+:3xkk-SE_Vx_byte:
+Skip next instruction if Vx = kk.
+The interpreter compares register Vx to kk, and if they are equal,
+increments the program counter by 2.
+# IF Registers[Vx] == KK THEN PC += 2
+:END:
 
 *** 4xkk - SNE Vx, byte
 **** Skip next instruction if Vx != kk.
