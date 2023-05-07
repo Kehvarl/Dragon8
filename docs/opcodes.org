@@ -1,17 +1,24 @@
-** Opcodes
-*** 0nnn - SYS addr
-**** Jump to a machine code routine at nnn.
-**** This instruction is only used on the old computers on which Chip-8 was
-**** originally implemented.
-**** It is ignored by modern interpreters.
 
-*** 00E0 - CLS
-**** Clear the display.
+* OPCODES
 
-*** 00EE - RET
-**** Return from a subroutine.
-**** The interpreter sets the program counter to the address at the top of the
-**** stack, then subtracts 1 from the stack pointer.
+** SYSTEM
+:0nnn_SYS_addr:
+Jump to a machine code routine at nnn.
+This instruction is only used on the old computers on which Chip-8 was
+originally implemented. It is ignored by modern interpreters.
+:END:
+
+:00E0_CLS:
+Clear the display.
+:END:
+
+:00EE_RET:
+Return from a subroutine.
+The interpreter sets the program counter to the address at the top of the
+stack, then subtracts 1 from the stack pointer.
+# PC = Stack[SP]
+# SP -= 1
+:END:
 
 *** 1nnn - JP addr
 **** Jump to location nnn.
@@ -33,7 +40,7 @@
 **** The interpreter compares register Vx to kk, and if they are not equal,
 **** increments the program counter by 2.
 
-*** 5xy0 - SE Vx, Vy
+** 5xy0 - SE Vx, Vy
 **** Skip next instruction if Vx = Vy.
 **** The interpreter compares register Vx to register Vy, and if they are equal,
 **** increments the program counter by 2.
