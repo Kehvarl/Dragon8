@@ -39,13 +39,15 @@ the top of the stack. The PC is then set to nnn.
 Skip next instruction if Vx = kk.
 The interpreter compares register Vx to kk, and if they are equal,
 increments the program counter by 2.
-# IF Registers[Vx] == KK THEN PC += 2
+# IF Registers[Vx] == kk THEN PC += 2
 :END:
 
-*** 4xkk - SNE Vx, byte
-**** Skip next instruction if Vx != kk.
-**** The interpreter compares register Vx to kk, and if they are not equal,
-**** increments the program counter by 2.
+:4xkk-SNE_Vx_byte:
+ Skip next instruction if Vx != kk.
+ The interpreter compares register Vx to kk, and if they are not equal,
+ increments the program counter by 2.
+# IF Registers[Vx] != kk THEN PC += 2
+:END:
 
 ** 5xy0 - SE Vx, Vy
 **** Skip next instruction if Vx = Vy.
