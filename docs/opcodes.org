@@ -56,9 +56,11 @@ increments the program counter by 2.
 # IF Registers[Vx] == Registers[Vy] THEN PC += 2
 :END:
 
-Annn - LD I, addr
+:Annn-LD_I_addr:
 Set I = nnn.
 The value of register I is set to nnn.
+# I = nnn
+:END:
 
 Bnnn - JP V0, addr
 Jump to location nnn + V0.
