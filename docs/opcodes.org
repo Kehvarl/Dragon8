@@ -58,7 +58,7 @@ increments the program counter by 2.
 
 :Annn-LD_I_addr:
 Set I = nnn.
-The value of register I is set to nnn.
+The value of register I (Address Lookup) is set to nnn.
 # I = nnn
 :END:
 
