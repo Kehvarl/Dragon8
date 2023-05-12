@@ -62,10 +62,11 @@ The value of register I (Address Lookup) is set to nnn.
 # I = nnn
 :END:
 
-Bnnn - JP V0, addr
+:Bnnn-JP_V0_addr:
 Jump to location nnn + V0.
 The program counter is set to nnn plus the value of V0.
-
+# PC = nnn + Registers[0]
+:END:
 
 ** ALU OPERATIONS
 *** 6xkk - LD Vx, byte
