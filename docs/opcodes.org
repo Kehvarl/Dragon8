@@ -133,20 +133,25 @@ If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from
 Vy, and the results stored in Vx.
 :END:
 
-*** 8xyE - SHL Vx {, Vy}
-**** Set Vx = Vx SHL 1.
-**** If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to
-**** 0. Then Vx is multiplied by 2.
+:8xyE-SHL_Vx_Vy:
+Set Vx = Vx SHL 1.
+If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to
+0. Then Vx is multiplied by 2.
+:END:
 
-*** 9xy0 - SNE Vx, Vy
-**** Skip next instruction if Vx != Vy.
-**** The values of Vx and Vy are compared, and if they are not equal, the
-**** program counter is increased by 2.
+:9xy0-SNE_Vx_Vy:
+Skip next instruction if Vx != Vy.
+The values of Vx and Vy are compared, and if they are not equal, the
+program counter is increased by 2.
+:END:
 
 ** RANDOM NUMBERS
-Cxkk - RND Vx, byte
+:Cxkk-RND_Vx_byte:
 Set Vx = random byte AND kk.
-The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
+The interpreter generates a random number from 0 to 255, which is then ANDed
+with the value kk. The results are stored in Vx. See instruction 8xy2 for more
+information on AND.
+:END:
 
 ** DRAWING AND SPRITES
 Dxyn - DRW Vx, Vy, nibble
