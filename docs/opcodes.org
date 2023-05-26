@@ -207,10 +207,12 @@ The values of I and Vx are added, and the results are stored in I.
 :END:
 
 ** REGISTER MANIPULATION
-Fx55 - LD [I], Vx
+:Fx55-LD_I_Vx:
 Store registers V0 through Vx in memory starting at location I.
 The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+:END:
 
-Fx65 - LD Vx, [I]
+:Fx65-LD_Vx_I:
 Read registers V0 through Vx from memory starting at location I.
 The interpreter reads values from memory starting at location I into registers V0 through Vx.
+:END:
