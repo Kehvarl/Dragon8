@@ -48,6 +48,7 @@
 ***** DONE Graphics Interaction
 ***** DONE Timers
 ***** TODO Keyboard
+**** DONE Opcode Doc
 
 **** TODO Controls
 ***** DONE run/stop
