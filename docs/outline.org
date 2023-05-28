@@ -93,4 +93,5 @@ Display Size
   1088x401
 
 update
+update
 
