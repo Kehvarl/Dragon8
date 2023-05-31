@@ -72,7 +72,11 @@
 
 **** TODO ROM Loader
 ***** TODO Select Load address
+****** Default 0x200
 ***** TODO Select File
+#+begin_src ruby
+contents = args.gtk.read_file "data/terrain.txt"
+#+end_src
 ***** TODO Copy file contents to RAM
 ***** TODO RUN ROM
 
