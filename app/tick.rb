@@ -4,8 +4,7 @@ def initialize args
   args.state.controls ||= Controls.new()
   args.state.rs = RunStop.new()
   args.state.s = Step.new()
-  args.state.keyboard ||= Keyboa, 0x6000, 0x6100, 0xD01F, 0x6110, 0xD01F, 0x6008, 0xD01F,
-                      0x6030rd.new()
+  args.state.keyboard ||= Keyboard.new()
   args.state.cpu ||= CPU.new(args.state.display)
   
   args.state.cpu.set([0xA2AE, 0x6000, 0x6101, 0xD01F, 0x6111, 0xD01F, 0x6008, 0xD01F,
