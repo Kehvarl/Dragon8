@@ -48,6 +48,7 @@
 ***** DONE Graphics Interaction
 ***** DONE Timers
 ***** TODO Keyboard
+**** DONE Opcode Doc
 
 **** TODO Controls
 ***** DONE run/stop
@@ -94,6 +95,4 @@ Display Margins
   Bottom 256
 Display Size
   1088x401
-
-update
 
