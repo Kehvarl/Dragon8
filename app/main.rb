@@ -1,3 +1,4 @@
+require 'app/rompicker.rb'
 require 'app/cpu.rb'
 require 'app/display.rb'
 require 'app/toggle_switch.rb'

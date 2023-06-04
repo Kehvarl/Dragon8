@@ -34,6 +34,11 @@ def tick args
     args.state.keyboard.keyup key
   end
 
+  if args.inputs.keyboard.key_held.p
+    rom =  RomPicker.new(args)
+    args.outputs.primitives << rom.render
+  end
+
   if args.inputs.keyboard.key_down.r
     #args.state.run = !args.state.run
     args.state.rs.click(args)
