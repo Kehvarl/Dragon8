@@ -37,10 +37,10 @@
 
 
 x=0, y=a
-0xA264
-0x6000
-0x6100
-0xD01F
+0xA264 ; Load I (Adress) to 0x264
+0x6000 ; Load 00 into Register 0
+0x6100 ; Load 00 into Register 1
+0xD01F ; Draw 16-byte Sprite from Address I on Screen at Register0, Register1
 0x6110
 0xD01F
 0x6008
