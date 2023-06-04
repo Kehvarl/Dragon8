@@ -8,9 +8,7 @@ attr_accessor :selected_file
 
   def render
     draw = []
-    draw << {x: 256, y: 300, w: 512, h: 256, r: 0x80, g: 0x80, b: 0x80}.solid!
-    draw << {x: 256, y: 300, w: 512, h: 256, r: 0x80, g: 0x00, b: 0x00}.border!
-
+    draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/RomPick.png"}.sprite!
     draw
   end
   
