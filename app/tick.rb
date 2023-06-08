@@ -22,6 +22,7 @@ def rom_pick_tick args
   args.outputs.primitives << args.state.display.screen
   args.outputs.primitives << args.state.rs
   args.outputs.primitives << args.state.s
+  
   args.outputs.primitives << rom.render
 
   if args.inputs.keyboard.key_down.q
