@@ -1,4 +1,5 @@
 def initialize args
+  args.state.state |= :main
   args.state.run ||= false
   args.state.display ||=  Display.new({margin_right: 128, margin_bottom:256})
   args.state.controls ||= Controls.new()
@@ -13,10 +14,24 @@ def initialize args
   args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
 end
 
-def tick args
-  if args.state.tick_count == 0
-    initialize args
+def rom_pick_tick args
+  rom =  RomPicker.new(args)
+
+  args.outputs.primitives << {x:0, y:0, w:1280, h:720, path:"sprites/console.png"}.sprite!
+  args.outputs.primitives << args.state.controls.render
+  args.outputs.primitives << args.state.display.screen
+  args.outputs.primitives << args.state.rs
+  args.outputs.primitives << args.state.s
+  
+  args.outputs.primitives << rom.render
+
+  if args.inputs.keyboard.key_down.q
+    args.state.rom = nil
+    args.state.state = :main
   end
+end
+
+def main_tick args
   args.state.rs.tick args
   args.state.s.tick args
   
@@ -34,9 +49,8 @@ def tick args
     args.state.keyboard.keyup key
   end
 
-  if args.inputs.keyboard.key_held.p
-    rom =  RomPicker.new(args)
-    args.outputs.primitives << rom.render
+  if args.inputs.keyboard.key_down.p
+    args.state.state = :rom_pick
   end
 
   if args.inputs.keyboard.key_down.r
@@ -55,23 +69,14 @@ def tick args
   end  
 end
 
-def junk args
-   if args.inputs.keyboard.key_down.j
-    args.state.display.swap()
-  end
-
-  if args.inputs.keyboard.key_held.s
-    # args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
-    # args.state.display.writebyte(rand(56), rand(32), 0b10101010, 0)
-    sprite = [36, 102, 255, 126, 60, 24]
-    args.state.display.writesprite(rand(56), rand(27), sprite, 0)
+def tick args
+  if args.state.tick_count == 0
+    initialize args
   end
   
-  if args.inputs.keyboard.key_down.k
-    args.state.display.clear(args.state.display.current_buffer)
-  end
-
-  if args.inputs.keyboard.key_down.a
-    args.state.display.clear
+  if args.state.state == :rom_pick
+    rom_pick_tick args
+  else
+    main_tick args
   end
 end
