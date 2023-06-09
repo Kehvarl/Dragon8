@@ -1,5 +1,5 @@
 def initialize args
-  args.state.state |= :main
+  args.state.state = :initialize
   args.state.run ||= false
   args.state.display ||=  Display.new({margin_right: 128, margin_bottom:256})
   args.state.controls ||= Controls.new()
@@ -14,34 +14,16 @@ def initialize args
   args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
 end
 
-def rom_pick_tick args
-  rom =  RomPicker.new(args)
-
+def draw_console args
   args.outputs.primitives << {x:0, y:0, w:1280, h:720, path:"sprites/console.png"}.sprite!
   args.outputs.primitives << args.state.controls.render
   args.outputs.primitives << args.state.display.screen
   args.outputs.primitives << args.state.rs
   args.outputs.primitives << args.state.s
-  
-  args.outputs.primitives << rom.render
-
-  if args.inputs.keyboard.key_down.q
-    args.state.rom = nil
-    args.state.state = :main
-  end
 end
 
-def main_tick args
-  args.state.rs.tick args
-  args.state.s.tick args
-  
-  args.outputs.primitives << {x:0, y:0, w:1280, h:720, path:"sprites/console.png"}.sprite!
-  args.outputs.primitives << args.state.controls.render
-  args.outputs.primitives << args.state.display.screen
-  args.outputs.primitives << args.state.rs
-  args.outputs.primitives << args.state.s
-
-  args.inputs.keyboard.keys[:down].each do |key|
+def handle_keys args
+    args.inputs.keyboard.keys[:down].each do |key|
     args.state.keyboard.keydown key
   end
 
@@ -56,11 +38,13 @@ def main_tick args
   if args.inputs.keyboard.key_down.r
     #args.state.run = !args.state.run
     args.state.rs.click(args)
+    args.state.state = :running
   end
 
-  if args.inputs.keyboard.key_down.s or args.state.run or args.state.rs.status == 1 or args.state.s.status == 1
-    args.state.cpu.tick args.state.keyboard
+  if args.inputs.keyboard.key_down.s
+    args.state.state = :step
   end
+  
   if args.inputs.keyboard.key_down.q
     $gtk.request_quit
   end
@@ -69,14 +53,50 @@ def main_tick args
   end  
 end
 
+def rom_pick_tick args
+  rom =  RomPicker.new(args)
+
+  draw_console args
+  
+  args.outputs.primitives << rom.render
+
+  if args.inputs.keyboard.key_down.q
+    args.state.rom = nil
+    args.state.state = :main
+  end
+end
+
+def main_tick args
+  args.state.rs.tick args
+  args.state.s.tick args
+
+  draw_console args
+end
+
 def tick args
   if args.state.tick_count == 0
     initialize args
+    args.state.state = :main
   end
-  
-  if args.state.state == :rom_pick
+
+
+  case args.state.state
+  when :rom_pick
     rom_pick_tick args
-  else
+
+  when :running
+    args.state.cpu.tick args.state.keyboard
+    draw_console args
+    handle_keys args
+
+  when :step
+    args.state.cpu.tick args.state.keyboard
+    args.state.state = :main
+    handle_keys args
+
+  when :main
     main_tick args
+    handle_keys args
+
   end
 end
