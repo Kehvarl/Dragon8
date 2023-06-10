@@ -96,3 +96,10 @@ Display Margins
 Display Size
   1088x401
 
+* States
+Initialize
+Main
+CPU_Step
+CPU_Running
+ROM_Pick
+Render
