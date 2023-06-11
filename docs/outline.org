@@ -98,8 +98,19 @@ Display Size
 
 * States
 Initialize
+  Clear RAM
+  Reset PC
+  Reset Registers
+  Set State to Main
 Main
+  Run Input Loop
 CPU_Step
+  CPU Single Instruction
+  Set State to Main
 CPU_Running
+  CPU Single Instruction
+  Check for Input
 ROM_Pick
-Render
+  Display ROM Dialog
+  Handle Input
+  Set state to Main
