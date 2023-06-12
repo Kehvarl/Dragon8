@@ -7,7 +7,7 @@ def initialize args
   args.state.s = Step.new()
   args.state.keyboard ||= Keyboard.new()
   args.state.cpu ||= CPU.new(args.state.display)
-  contents = args.gtk.read_file "data/roms/drlogo.rom"
+  contents = args.gtk.read_file "data/roms/IBM Logo.ch8"
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
 
@@ -54,12 +54,27 @@ def handle_keys args
 end
 
 def rom_pick_tick args
-  rom =  RomPicker.new(args)
+  args.state.rom ||= RomPicker.new(args)
 
   draw_console args
   
-  args.outputs.primitives << rom.render
+  args.outputs.primitives << args.state.rom.render
 
+  if args.inputs.keyboard.key_down.enter
+    contents = args.gtk.read_file args.state.rom.selected_file
+    args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
+    args.state.rom = nil
+    args.state.state = :main
+  end
+
+  if args.inputs.keyboard.down
+    args.state.rom.select_down
+  end
+
+  if args.inputs.keyboard.up
+    args.state.rom.select_up
+  end
+  
   if args.inputs.keyboard.key_down.q
     args.state.rom = nil
     args.state.state = :main
