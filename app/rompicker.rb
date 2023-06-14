@@ -26,9 +26,11 @@ attr_accessor :selected_file
     draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/RomPick.png"}.sprite!
     (0..[@file_list.count, 6].min).each do |index|
       if index == @selected
-        draw << {x:270, y:556 - (index * 16) -48, w:484, h:24, r:128, g:0, b:128}.solid!
+        draw << {x:270, y:556 - (index * 24) -46, w:484, h:24,
+                 r:128, g:0, b:128}.solid!
       end
-      draw << {x:272, y:556 - (index * 16) -24, text:@roms[index], r:255, g:255, b:255}.label!
+      draw << {x:272, y:556 - (index * 24) -24, text:@roms[index],
+               r:255, g:255, b:255}.label!
      end
     draw
   end
