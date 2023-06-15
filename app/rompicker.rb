@@ -5,7 +5,7 @@ attr_accessor :selected_file
     @roms = []
     @file_list = args.gtk.list_files "data/roms/"
     @file_list.each do |attachment|
-      @roms << attachment if attachment[-4..-1]  == '.rom' or attachment[-4..-1] == '.ch8'
+      @roms << attachment if ['.rom', '.ch8'].include?(attachment[-4..-1])
     end
     @selected = 0
     @selected_file = @roms[@selected]
