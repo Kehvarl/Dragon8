@@ -1,5 +1,5 @@
 class RomPicker
-attr_accessor :selected_file
+attr_accessor :selected_file, :close_select, :close_quit
 
   def initialize args
     @roms = []
@@ -7,6 +7,8 @@ attr_accessor :selected_file
     @file_list.each do |attachment|
       @roms << attachment if ['.rom', '.ch8'].include?(attachment[-4..-1])
     end
+    @close_select = false
+    @close_quit = false 
     @selected = 0
     @selected_file = @roms[@selected]
   end
@@ -19,6 +21,24 @@ attr_accessor :selected_file
   def select_up
     @selected = [@selected-1, 0].max()
     @selected_file = @roms[@selected]
+  end
+
+  def tick args
+    if args.inputs.keyboard.key_down.enter
+      @close_select = true
+    end
+
+    if args.inputs.keyboard.down
+      select_down
+    end
+
+    if args.inputs.keyboard.up
+      select_up
+    end
+    
+    if args.inputs.keyboard.key_down.q
+      @close_quit = true
+    end
   end
 
   def render
