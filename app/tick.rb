@@ -10,8 +10,7 @@ def initialize args
   contents = args.gtk.read_file "data/roms/drlogo.rom"
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
-
-  args.state.display.xorpixel(rand(64), rand(32), true, args.state.display.next_buffer)
+  args.state.rom ||= nil
 end
 
 def draw_console args
@@ -54,29 +53,22 @@ def handle_keys args
 end
 
 def rom_pick_tick args
-  args.state.rom ||= RomPicker.new(args)
+  if args.state.rom == nil
+    args.state.rom = RomPicker.new(args)
+  end
 
   draw_console args
+  args.state.rom.tick args
   
   args.outputs.primitives << args.state.rom.render
 
-  if args.inputs.keyboard.key_down.enter
-    contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file}"
+  if args.state.rom.close_select
+      contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file}"
 
-    args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
-    args.state.rom = nil
-    args.state.state = :main
-  end
-
-  if args.inputs.keyboard.down
-    args.state.rom.select_down
-  end
-
-  if args.inputs.keyboard.up
-    args.state.rom.select_up
+      args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
   end
   
-  if args.inputs.keyboard.key_down.q
+  if args.state.rom.close_quit or args.state.rom.close_select
     args.state.rom = nil
     args.state.state = :main
   end
