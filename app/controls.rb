@@ -28,6 +28,19 @@ class Step < Momentary
   end
 end
 
+class ROM_Load < Momentary
+  def initialize args={}
+    super args
+    @x = args.x || 1200
+    @y = args.y || 348
+    @w = args.w || 32
+    @h = args.h || 64
+    @path = args.path || "sprites/switches/step_anim.png"
+    
+  end
+  
+end
+
 class Controls
   def initialize args={}
     @x = args.x || 1184
@@ -59,21 +72,6 @@ class Controls
     return [wi, a, g, border, shade]
   end
   
-  def run_stop x, y, w, h
-    case @run_stop
-    when 1
-      sx = 0
-    when 0
-      sx = 128
-    end
-    {x: x + 16, y: y+10, w: w-10, h: h,
-     path: "sprites/switches/run_stop.png",
-     source_w:32, source_x:sx}.sprite!
-  end
-
-  def step x, y, w, h
-    {x: x + 5, y: y+10, w: w-10, h: 64, r:128, g:128, b:0}.solid!    
-  end
 
   def render
     arr = []
