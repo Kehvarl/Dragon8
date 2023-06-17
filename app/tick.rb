@@ -12,6 +12,7 @@ def initialize args
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
   args.state.rom ||= nil
+
 end
 
 def draw_console args
@@ -46,36 +47,15 @@ def handle_keys args
   if args.inputs.keyboard.key_down.s
     args.state.state = :step
   end
-  
+
   if args.inputs.keyboard.key_down.q
     $gtk.request_quit
   end
   if args.inputs.keyboard.key_down.m
     args.state.cpu.debug = !args.state.cpu.debug
-  end  
-end
-
-def rom_pick_tick args
-  if args.state.rom == nil
-    args.state.rom = RomPicker.new(args)
-  end
-
-  draw_console args
-  args.state.rom.tick args
-  
-  args.outputs.primitives << args.state.rom.render
-
-  if args.state.rom.close_select
-      contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file}"
-
-      args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
-  end
-  
-  if args.state.rom.close_quit or args.state.rom.close_select
-    args.state.rom = nil
-    args.state.state = :main
   end
 end
+
 
 def main_tick args
   args.state.rs.tick args
@@ -93,8 +73,25 @@ def main_tick args
   if args.state.r.status == 1
     args.state.state = :rom_pick
   end
-  
-  draw_console args
+end
+
+def rom_load_tick args
+  if args.state.rom == nil
+    args.state.rom = RomPicker.new(args)
+  end
+
+  args.state.rom.tick args
+
+  if args.state.rom.close_select
+      contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file}"
+
+      args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
+  end
+
+  if args.state.rom.close_quit or args.state.rom.close_select
+    args.state.rom = nil
+    args.state.state = :main
+  end
 end
 
 def tick args
@@ -103,10 +100,11 @@ def tick args
     args.state.state = :main
   end
 
+  draw_console args
 
   case args.state.state
   when :rom_pick
-    rom_pick_tick args
+    rom_load_tick args
 
   when :running
     args.state.cpu.tick args.state.keyboard
