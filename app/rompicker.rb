@@ -8,7 +8,7 @@ attr_accessor :selected_file, :close_select, :close_quit
       @roms << attachment if ['.rom', '.ch8'].include?(attachment[-4..-1])
     end
     @close_select = false
-    @close_quit = false 
+    @close_quit = false
     @selected = 0
     @selected_file = @roms[@selected]
   end
@@ -23,7 +23,11 @@ attr_accessor :selected_file, :close_select, :close_quit
     @selected_file = @roms[@selected]
   end
 
+
   def tick args
+
+    args.outputs.primitives << args.state.rom.render
+
     if args.inputs.keyboard.key_down.enter
       @close_select = true
     end
@@ -35,7 +39,7 @@ attr_accessor :selected_file, :close_select, :close_quit
     if args.inputs.keyboard.up
       select_up
     end
-    
+
     if args.inputs.keyboard.key_down.q
       @close_quit = true
     end
@@ -54,5 +58,5 @@ attr_accessor :selected_file, :close_select, :close_quit
      end
     draw
   end
-  
+
 end
