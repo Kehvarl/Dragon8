@@ -47,7 +47,7 @@ class Display
     else
     @screen_buffers = []
     @screen_buffers << create_screen_buffer
-    @screen_buffers << create_screen_buffer      
+    @screen_buffers << create_screen_buffer
     end
   end
 
@@ -60,7 +60,7 @@ class Display
       @screen_buffers[buffer][y][x].a = 0
     else
       @screen_buffers[buffer][y][x].a = 255
-      
+
     end
   end
 
@@ -90,7 +90,7 @@ class Display
   def writebyte x, y, byte, buffer=nil
     any_set_to_unset = false
     if buffer == nil
-      buffer = next_buffer      
+      buffer = next_buffer
     end
     7.step(0,-1).each_with_index do |index, bit|
       if xorpixel(x+index, y, byte & (1<<bit) == (1<<bit), buffer)
@@ -141,7 +141,7 @@ class Display
 
   # Return the next screen buffer
   def next_screen_buffer
-    @screen_buffers[next_buffer]    
+    @screen_buffers[next_buffer]
   end
 
   def serialize
@@ -160,5 +160,5 @@ class Display
   def to_s
     serialize.to_s
   end
-  
+
 end
