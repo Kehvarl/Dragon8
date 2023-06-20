@@ -249,7 +249,8 @@ class CPU
     when 0xd # DRW Vx, Vy, N: Draw an N-byte Sprite from memory location stored in I at
       # Coordinate: Vx, Vy
       regx, regy = rxry_decode(rest)
-      n = rest & 0x00f
+
+      n = (rest & 0x00f) -1
       sprite = []
       (0..n).each do |offset|
         sprite << @memory[@i + offset]
