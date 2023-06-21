@@ -250,9 +250,9 @@ class CPU
       # Coordinate: Vx, Vy
       regx, regy = rxry_decode(rest)
 
-      n = (rest & 0x00f) -1
+      n = (rest & 0x00f)
       sprite = []
-      (0..n).each do |offset|
+      (0...n).each do |offset|
         sprite << @memory[@i + offset]
       end
       debug_msg += "DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})\n"
