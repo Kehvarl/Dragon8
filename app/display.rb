@@ -1,7 +1,7 @@
 class Display
   def initialize args
-    @w = args.w || 63
-    @h = args.h || 31
+    @w = args.w || 64
+    @h = args.h || 32
     @screen_width  = args.screen_width  || 1280
     @screen_height = args.screen_heignt || 720
     @margin_top    = args.margin_top    || 64
@@ -19,9 +19,9 @@ class Display
   # Create a new screen buffer
   def create_screen_buffer
     buffer = []
-    (0..@h).each do |y|
+    (0...@h).each do |y|
       buffer << []
-      (0..@w).each do |x|
+      (0...@w).each do |x|
         buffer[y] << {
           x: (@sw * x) + @margin_left,
           y: (@sh * y) + @margin_bottom,
