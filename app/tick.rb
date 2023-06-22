@@ -51,6 +51,16 @@ def handle_keys args
   if args.inputs.keyboard.key_down.q
     $gtk.request_quit
   end
+
+  if args.inputs.keyboard.key_down.b
+    args.state.display.clear
+    args.state.cpu.pc = 0x200
+    if args.state.state == :running
+      args.state.rs.click(args)
+      args.state.state = :main
+    end
+  end
+
   if args.inputs.keyboard.key_down.m
     args.state.cpu.debug = !args.state.cpu.debug
   end
