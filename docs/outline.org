@@ -31,7 +31,7 @@
 
 **** TODO Opcodes
 ***** DONE Register Operations
-****** DONE LD Vx Immediate 
+****** DONE LD Vx Immediate
 ****** DONE ADD Vx, Immediate
 ****** DONE 0x8nnn - Multiple Operations
 ***** DONE Flow Control -
@@ -114,3 +114,6 @@ ROM_Pick
   Display ROM Dialog
   Handle Input
   Set state to Main
+
+
+Does state information live with the switches or in the state collection?
