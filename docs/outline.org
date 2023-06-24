@@ -117,3 +117,20 @@ ROM_Pick
 
 
 Does state information live with the switches or in the state collection?
+What happens when you flick a switch?
+  * If animating, exit
+  * Set Status to opposite State
+  * Set target Animation State
+  * Start Animating
+  * if at end animation state, stop Animating
+Haven't figured out callbacks
+args.state.controls
+  Run/Stop
+  Step
+  Reset
+  Load ROM
+  Display Color
+  Keyboard Input
+Other States
+  Memory Editor
+  
