@@ -133,4 +133,7 @@ args.state.controls
   Keyboard Input
 Other States
   Memory Editor
-  
+  Start/initialize
+  Reset
+  Sound
+    Playing
