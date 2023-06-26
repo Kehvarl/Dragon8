@@ -95,6 +95,7 @@ Display Margins
   Bottom 256
 Display Size
   1088x401
+  64x32 squares
 
 * States
 Initialize
