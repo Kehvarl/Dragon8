@@ -1,17 +1,17 @@
 def initialize args
-  args.state.state = :initialize
-  args.state.run ||= false
-  args.state.display ||=  Display.new({margin_right: 128, margin_bottom:256})
-  args.state.controls ||= Controls.new()
+  args.state.state = :main
+  args.state.run = false
+  args.state.display =  Display.new({margin_right: 128, margin_bottom:256})
+  args.state.controls = Controls.new()
   args.state.rs = RunStop.new()
   args.state.s = Step.new()
   args.state.r = ROM_Load.new()
-  args.state.keyboard ||= Keyboard.new()
-  args.state.cpu ||= CPU.new(args.state.display)
+  args.state.keyboard = Keyboard.new()
+  args.state.cpu = CPU.new(args.state.display)
   contents = args.gtk.read_file "data/roms/drlogo.rom"
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
-  args.state.rom ||= nil
+  args.state.rom = nil
 
 end
 
@@ -57,8 +57,9 @@ def handle_keys args
     args.state.cpu.pc = 0x200
     if args.state.state == :running
       args.state.rs.click(args)
-      args.state.state = :main
     end
+    args.state.state = :initialize
+
   end
 
   if args.inputs.keyboard.key_down.m
@@ -113,6 +114,9 @@ def tick args
   draw_console args
 
   case args.state.state
+  when :initialize
+    initialize args
+    
   when :rom_pick
     rom_load_tick args
 
