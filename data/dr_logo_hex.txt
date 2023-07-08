@@ -39,6 +39,23 @@ FFFF FFFE FEFC F9FB F2F0 F0F0 F8FC FE   0F
 FFFF FFFF FFFF 7F7F 3F1F 3F7F FFFF FF   5A
 FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00
 
+FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00
+FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00
+3C9E CEE3 F3F9 FDFE FEFF FFFF FFFF FF   69
+0F0F 0303 81C1 E1F0 783F 9FCF E7F3 F8   78
+A4DE D9E3 F674 7079 F1F3 E7CF 9F3F 7F   87
+0307 0F1F 3F7F FFFF FFFF FFFF FFFF FF   96
+FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00
+FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00
+
+FFFF                                    A7
+FFFF                                    A7
+FFFF                                    A7
+FCFF                                    A9
+FFFF                                    A7
+FFFF                                    A7
+FFFF                                    A7
+FFFF                                    A7
 
 
 0x6XKK # Load KK into Register X
