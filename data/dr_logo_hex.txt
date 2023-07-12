@@ -86,7 +86,7 @@ x=0, y=a
 
 ; Draw Solid Sprites
 ; Positions: 00,00 00,0f 08,0f 30,0f 38x0f 38,00
-0xA27F ; Load I (Address) with 0x264
+0xA27F ; Load I (Address) with 0x27F
 0x6000 ; Load 00 into Register 0
 0x6100 ; Load 00 into Register 1
 0xD01F ; Draw 15-byte Sprite from Address I on Screen at Register0, Register1
@@ -223,3 +223,4 @@ x=0, y=a
 0xD012
 
 0x127E
+; Sprite block here - 0x27F..
