@@ -223,6 +223,8 @@ x=0, y=a
 0x127E
 ; Sprite block here - 0x27F..
 
+223 - 86 = 137 * 2  = 274 bytes
+* Hex file comes in at 233 bytes.
 
 ;; Convert to Bin File
 0xA27F,0x6000,0x6100,0xD01F,0xD01F,0x6008,0xD01F,0x6030,
