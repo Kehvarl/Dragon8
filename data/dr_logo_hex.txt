@@ -180,7 +180,7 @@ x=0, y=a
 0xD012
 
 0x127E
-; Sprite block here - 0x27F..
+; Sprite block here - 0x28D..
 
 223 - 86 = 137 * 2  = 274 bytes
 * Hex file comes in at 233 bytes.
