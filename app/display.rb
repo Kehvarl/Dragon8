@@ -19,9 +19,9 @@ class Display
   # Create a new screen buffer
   def create_screen_buffer
     buffer = []
-    (0...@h).each do |y|
+    (0..@h).each do |y|
       buffer << []
-      (0...@w).each do |x|
+      (0..@w).each do |x|
         buffer[y] << {
           x: (@sw * x) + @margin_left,
           y: (@sh * y) + @margin_bottom,
@@ -72,6 +72,7 @@ class Display
     if set then color = 255 end
 
     y = @h - y
+    puts("#{buffer}, #{x}, #{y}, #{set}")
     if @screen_buffers[buffer][y][x].r == 255
       if set
         set_to_unset = true
