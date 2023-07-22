@@ -28,7 +28,7 @@
 
 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF  00  38,0
 
-0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF  00  38,0
+0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF  00  38,10
 
 FFFF FFFF FFFF FFFF FFFF FFFF FFFF FF   00 00 00 F
 FFFF FFFE FEFC F9FB F2F0 F0F0 F8FC FE   0F 08 00 F
@@ -79,11 +79,24 @@ Sprite block
 Start at 0x200
 Sprites at 0x200 + size_of_program
 
+Sprites to draw
+00  00,00 00,0F 08,0F 30,0F 38,0F 38,00
+10  08,00
+20  10,00
+30  10,10
+40  08,00
+50  18,10
+60  20,00
+70  20,10
+80  28,00
+90  28,10
+10  30,10
+
 x=0, y=a
 
 ; Draw Solid Sprites
 ; Positions: 00,00 00,0f 08,0f 30,0f 38,0f 38,00
-0xA28E; Load I (Address) with 0x28D
+0xA28E; Load I (Address) with Sprite+00
 0x6000 ; Load 00 into Register 0
 0x6100 ; Load 00 into Register 1
 0xD01F ; Draw 15-byte Sprite from Address I on Screen at Register0, Register1
