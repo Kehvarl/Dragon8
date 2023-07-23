@@ -72,7 +72,7 @@ class Display
     if set then color = 255 end
 
     y = @h - y
-    puts("#{buffer}, #{x}, #{y}, #{set}")
+    # puts("#{buffer}, #{x}, #{y}, #{set}")
     if @screen_buffers[buffer][y][x].r == 255
       if set
         set_to_unset = true
