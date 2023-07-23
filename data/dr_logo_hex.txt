@@ -74,6 +74,7 @@ Sprite block
 0xANNN # Load NNN into I
 0xDXYF # draw a 16 byte sprite from I at RegX,RegY
 0x1NNN # Jump to NNN
+0XFN1E # Add Register N to I
 
 
 Start at 0x200
@@ -99,6 +100,7 @@ x=0, y=a
 
 ; Draw Solid Sprites
 ; Positions: 00,00 00,0f 08,0f 30,0f 38,0f 38,00
+0x6F0F
 0xA288; Load I (Address) with Sprite+00
 0x6000 ; Load 00 into Register 0
 0x6100 ; Load 00 into Register 1
@@ -120,50 +122,50 @@ x=0, y=a
 0xD01F ; 38,00
 
 ; Draw remaining sprites
-0xA297 ; Sprite+0F @ 0x21F
+0xFF1E ; Sprite+0F
 0x6008
 0x6100
 0xD01F ; 08,00
 
-0xA2A8 ; Sprite+1E
+0xFF1E ; Sprite+1D
 0x6010
 0xD01F ; 10,00
 
-0xA2B7 ; Sprite+2D @ 0x22F
+0xFF1E ; Sprite+2D @ 0x22F
 0x6018
 0xD01F ; 18,00
 
-0xA2C8 ; Sprite+3C
+0xFF1E ; Sprite+3C
 0x6020
 0xD01F ; 20,00
 
-0xA2D7 ; Sprite+4B
+0xFF1E ; Sprite+4B
 0x6028
 0xD01F ; 28,00 @ 0x23F
 
-0xA2E8 ; Sprite+5A
+0xFF1E ; Sprite+5A
 0x6030
 0xD01F ; 30,00
 
-0xA2F7 ; Sprite+69
+0xFF1E ; Sprite+69
 0x6010
 0x610F
 0xD01F ; 10,0F
 
-0xA308 ; Sprite+78 @ 0x24F
+0xFF1@ ; Sprite+78 @ 0x24F
 0x6018
 0xD01F ; 18,0F
 
-0xA317 ; Sprite+87
+0xFF1E ; Sprite+87
 0x6020
 0xD01F ; 20,0F
 
-0xA328 ; Sprite+96
+0xFF1E ; Sprite+96
 0x6028
 0xD01F ; 28,0F @ 0x25F
 
 ; Draw bottom row sprites
-0xA337 ; Sprite+A7
+0xFF1E ; Sprite+A7
 0x6000
 0x610E
 0xD012 ; 00,0E
@@ -186,7 +188,8 @@ x=0, y=a
 0x6038
 0xD012 ; 38,0E @ 0x27F
 
-0xA339 ; Sprite+A9
+0x6F02
+0xFF1E ; Sprite+A9
 0x6020
 0xD012 ; 20,0E
 
