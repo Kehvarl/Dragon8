@@ -1,7 +1,7 @@
 class CPU
   attr_accessor :debug, :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
-    @debug = false
+    @debug = true
     @ticks_per_frame = 1
     @display = display
     @register = []
@@ -279,6 +279,10 @@ class CPU
     when 0xf # Timer Commands
       regx = (rest & 0xf00) >> 8
       operation = rest & 0x0ff
+      puts(operation.to_s(16))
+      puts(@i.to_s(16))
+      puts(regx.to_s(16))
+      puts(@register[regx].to_s(16))
       case operation
       when 0x07 # LD Vx, DT: Load the value from the Delay Timer into  Register X
         @register[regx] = @delay
@@ -290,10 +294,10 @@ class CPU
       when 0x18 # LD ST, Vx: Load the value from Register X into the Sound Timer
         @sound = @register[regx]
       when 0x1e # Add I, Vx: Add the value from Register X to the value in I. Store in I
-        if @i + @register[regx] > 255
-          @i -= 255
-          @register[15] = 1
-        end
+        # if @i + @register[regx] > 255
+        #   @i -= 255
+        #   @register[15] = 1
+        # end
         @i += @register[regx]
       when 0x29 # LD F, Vx: Load address of sprite for value Vx into I
         @i = @symbol[@register[regx]]
