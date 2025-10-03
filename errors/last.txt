@@ -1,0 +1,9 @@
+* EXCEPTION:
+* ERROR: Exception while requiring app/main.rb.
+* ERROR: Exception while requiring app/rompicker.rb.
+app/rompicker.rb does not exist.
+** Backtrace:
+*** app/main.rb:1
+** Backtrace:
+*** app/main.rb:1
+** Backtrace:
