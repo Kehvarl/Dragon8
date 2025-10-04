@@ -1,10 +1,7 @@
-require 'app/ui/rompicker.rb'
 require 'app/vm/cpu.rb'
 require 'app/vm/display.rb'
-require 'app/ui/toggle_switch.rb'
-require 'app/ui/momentary_switch.rb'
-require 'app/ui/controls.rb'
 require 'app/vm/keyboard.rb'
+require 'app/ui/controls.rb'
 
 
 def initialize args

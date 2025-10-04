@@ -1,3 +1,8 @@
+require 'app/ui/toggle_switch.rb'
+require 'app/ui/momentary_switch.rb'
+require 'app/ui/rompicker.rb'
+
+
 # Display Color
 # Run/Stop
 # Step
