@@ -47,7 +47,7 @@ attr_accessor :selected_file, :close_select, :close_quit
 
   def render
     draw = []
-    draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/RomPick.png"}.sprite!
+    draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/rompick.png"}.sprite!
     (0..[@file_list.count, 6].min).each do |index|
       if index == @selected
         draw << {x:270, y:556 - (index * 24) -46, w:484, h:24,

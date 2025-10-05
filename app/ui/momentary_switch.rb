@@ -32,7 +32,7 @@ class Momentary
   def tick args
     @status = 0
     
-    if args.inputs.mouse.button_left and !@held
+    if !@held and (args.inputs.mouse.button_left and args.inputs.mouse.inside_rect?(self))
       self.click(args)
       @status = 1
       @held = true
