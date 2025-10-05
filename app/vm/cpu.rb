@@ -1,7 +1,7 @@
 class CPU
   attr_accessor :debug, :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
-    @debug = true
+    @debug = false
     @ticks_per_frame = 1
     @display = display
     @register = []
@@ -279,10 +279,12 @@ class CPU
     when 0xf # Timer Commands
       regx = (rest & 0xf00) >> 8
       operation = rest & 0x0ff
-      puts(operation.to_s(16))
-      puts(@i.to_s(16))
-      puts(regx.to_s(16))
-      puts(@register[regx].to_s(16))
+      if @debug
+        puts(operation.to_s(16))
+        puts(@i.to_s(16))
+        puts(regx.to_s(16))
+        puts(@register[regx].to_s(16))
+      end
       case operation
       when 0x07 # LD Vx, DT: Load the value from the Delay Timer into  Register X
         @register[regx] = @delay
