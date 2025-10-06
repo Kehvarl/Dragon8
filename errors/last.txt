@@ -1,9 +1,10 @@
 * EXCEPTION:
 * ERROR: Exception while requiring app/main.rb.
-* ERROR: Exception while requiring app/rompicker.rb.
-app/rompicker.rb does not exist.
+* ERROR: Exception while requiring app/ui/controls.rb.
+uninitialized constant Toggle_Switch
 ** Backtrace:
-*** app/main.rb:1
+*** app/ui/controls.rb:15
+*** app/main.rb:4
 ** Backtrace:
-*** app/main.rb:1
+*** app/main.rb:4
 ** Backtrace:
