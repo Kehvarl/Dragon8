@@ -1,4 +1,5 @@
-require 'app/ui/toggle_switch.rb'
+#require 'app/ui/toggle_switch.rb'
+require 'app/ui/switch.rb'
 require 'app/ui/momentary_switch.rb'
 require 'app/ui/rompicker.rb'
 
@@ -14,7 +15,7 @@ require 'app/ui/rompicker.rb'
 class RunStop < Toggle_Switch
   def initialize args={}
     super args
-     @x = args.x || 1200
+    @x = args.x || 1200
     @y = args.y || 540
     @w = args.w || 32
     @h = args.h || 64
