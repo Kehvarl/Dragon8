@@ -1,6 +1,6 @@
 #require 'app/ui/toggle_switch.rb'
 require 'app/ui/switch.rb'
-require 'app/ui/momentary_switch.rb'
+#require 'app/ui/momentary_switch.rb'
 require 'app/ui/rompicker.rb'
 
 
@@ -23,7 +23,7 @@ class RunStop < Toggle_Switch
   end
 end
 
-class Step < Momentary
+class Step < Momentary_Switch
   def initialize args={}
     super args
     @x = args.x || 1200
@@ -34,7 +34,7 @@ class Step < Momentary
   end
 end
 
-class ROM_Load < Momentary
+class ROM_Load < Momentary_Switch
   def initialize args={}
     super args
     @x = args.x || 1200
