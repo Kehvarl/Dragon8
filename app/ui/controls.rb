@@ -1,6 +1,4 @@
-#require 'app/ui/toggle_switch.rb'
 require 'app/ui/switch.rb'
-#require 'app/ui/momentary_switch.rb'
 require 'app/ui/rompicker.rb'
 
 
@@ -54,7 +52,7 @@ class Controls
     @w = args.w || 64
     @h = args.h || 412
 
-    @color = 0
+    @color = 1
     @colors = [{r:255, g:255, b:255}, {r:128, g:128, b:0}, {r:0, g:128, b:0}]
 
     @run_stop=1
