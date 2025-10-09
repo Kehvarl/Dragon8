@@ -1,10 +1,20 @@
 * EXCEPTION:
-* ERROR: Exception while requiring app/main.rb.
-* ERROR: Exception while requiring app/ui/controls.rb.
-uninitialized constant Toggle_Switch
+* ERROR - :Color_Picker method missing on ~Controls~.
+
+#+begin_src ~Controls#inspect~
+#<Controls:0x750be4868810 @w=64, @h=412, @y=256, @x=1184>
+#+end_src ~Controls#inspect~
+
+
+
+The method named
+  :Color_Picker
+with args
+  [{:x=>1184, :y=>631, :w=>64, :h=>32}]
+doesn't exist on [Controls, #<Class:#<Controls:0x750be4868810>>].
+
+(suggestions above)
 ** Backtrace:
-*** app/ui/controls.rb:15
-*** app/main.rb:4
-** Backtrace:
-*** app/main.rb:4
-** Backtrace:
+*** app/ui/controls.rb:73:in initialize
+*** app/main.rb:11:in initialize
+*** app/main.rb:116:in tick

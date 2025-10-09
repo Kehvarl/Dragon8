@@ -12,6 +12,7 @@ def initialize args
   args.state.rs = RunStop.new()
   args.state.s = Step.new()
   args.state.r = ROM_Load.new()
+  args.state.color_picker = Color_Picker.new({x: @x, y: @y + @h-37, w: @w, h: 32})
   args.state.keyboard = Keyboard.new()
   args.state.cpu = CPU.new(args.state.display)
   contents = args.gtk.read_file "data/roms/drlogo.rom"
@@ -28,6 +29,7 @@ def draw_console args
   args.outputs.primitives << args.state.rs
   args.outputs.primitives << args.state.s
   args.outputs.primitives << args.state.r
+  args.outputs.primitives << args.state.color_picker.render
 end
 
 def handle_keys args
@@ -78,6 +80,7 @@ def main_tick args
   args.state.rs.tick args
   args.state.s.tick args
   args.state.r.tick args
+  args.state.color_picker.tick args
 
   if args.state.rs.status == 1
     args.state.state = :running
