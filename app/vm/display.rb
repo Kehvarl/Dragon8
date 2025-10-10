@@ -10,6 +10,7 @@ class Display
     @margin_right  = args.margin_right  || 64
     @sw = (@screen_width - (@margin_left + @margin_right))/@w
     @sh = (@screen_height - (@margin_top + @margin_bottom))/@h
+    @screen_color = {r:0, g:128, b:0}
     @screen_buffers = []
     @current_buffer = 0
     @screen_buffers << create_screen_buffer
@@ -53,9 +54,9 @@ class Display
 
   # Actually set the appearance of a specific pixel in the screen buffer
   def setpixel x, y, r=0, g=0, b=0, buffer=0
-    @screen_buffers[buffer][y][x].r = r
-    @screen_buffers[buffer][y][x].g = g
-    @screen_buffers[buffer][y][x].b = b
+    @screen_buffers[buffer][y][x].r = @screen_color.r
+    @screen_buffers[buffer][y][x].g = @screen_color.g
+    @screen_buffers[buffer][y][x].b = @screen_color.b
     if r+g+b ==0
       @screen_buffers[buffer][y][x].a = 0
     else

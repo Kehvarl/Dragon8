@@ -12,7 +12,7 @@ def initialize args
   args.state.rs = RunStop.new()
   args.state.s = Step.new()
   args.state.r = ROM_Load.new()
-  args.state.color_picker = Color_Picker.new({x: @x, y: @y + @h-37, w: @w, h: 32})
+  args.state.color_picker = Color_Picker.new({x: 1184, y: 251, w: 64, h: 32})
   args.state.keyboard = Keyboard.new()
   args.state.cpu = CPU.new(args.state.display)
   contents = args.gtk.read_file "data/roms/drlogo.rom"
