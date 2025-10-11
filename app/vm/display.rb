@@ -1,4 +1,5 @@
 class Display
+  attr_accessor :screen_color
   def initialize args
     @w = args.w || 64
     @h = args.h || 32
