@@ -1,4 +1,5 @@
 class Display
+  attr_accessor :screen_color
   def initialize args
     @w = args.w || 64
     @h = args.h || 32
@@ -49,6 +50,16 @@ class Display
     @screen_buffers = []
     @screen_buffers << create_screen_buffer
     @screen_buffers << create_screen_buffer
+    end
+  end
+
+  def recolor new_color, buffer=0
+    (0..@h).each do |y|
+      (0..@w).each do |x|
+        @screen_buffers[buffer][y][x].r = new_color.r
+        @screen_buffers[buffer][y][x].g = new_color.g
+        @screen_buffers[buffer][y][x].b = new_color.b
+      end
     end
   end
 

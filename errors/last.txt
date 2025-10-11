@@ -1,19 +1,22 @@
 * EXCEPTION:
-:inside_rect? failed for inner_rect: {:x=>1218.0, :y=>268.0, :w=>0, :h=>0} outer_rect: #<Color_Picker:0x7b535c8e3260>.
-* ERROR - :w method missing on ~Color_Picker~.
+* ERROR - :[] method missing on ~NilClass~.
 
-#+begin_src ~Color_Picker#inspect~
-#<Color_Picker:0x7b535c8e3260 @colors=[{:r=>255, :g=>255, :b=>255}, {:r=>128, :g=>128, :b=>0}, {:r=>0, :g=>128, :b=>0}], @x=1184, @h=32, @color=0, @y=251, @w=64>
-#+end_src ~Color_Picker#inspect~
+#+begin_src ~NilClass#inspect~
+nil
+#+end_src ~NilClass#inspect~
 
 
 
 The method named
-  :w
-doesn't exist on [Color_Picker, #<Class:#<Color_Picker:0x7b535c8e3260>>].
+  :[]
+with args
+  [0]
+doesn't exist on [NilClass, NilClassFalseClass].
 
 (suggestions above)
 ** Backtrace:
-*** app/ui/controls.rb:56:in tick
-*** app/main.rb:83:in main_tick
-*** app/main.rb:143:in tick
+*** app/vm/display.rb:59:in recolor
+*** app/vm/display.rb:58:in recolor
+*** app/vm/display.rb:57:in recolor
+*** app/main.rb:84:in main_tick
+*** app/main.rb:144:in tick

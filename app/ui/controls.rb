@@ -1,7 +1,6 @@
 require 'app/ui/switch.rb'
 require 'app/ui/rompicker.rb'
 
-
 # Display Color
 # Run/Stop
 # Step
@@ -51,21 +50,31 @@ class Color_Picker
     @y = args.y || 0
     @w = args.w || 64
     @h = args.h || 32
+    @wi = {x: @x,          y: @y, w: @w/3, h: @h, **@colors[0]}.solid!
+    @am  = {x: @x+(@w/3),   y: @y, w: @w/3, h: @h, **@colors[1]}.solid!
+    @gr  = {x: @x+(2*@w/3), y: @y, w: @w/3, h: @h, **@colors[2]}.solid!
   end
 
   def tick args
-    if args.inputs.mouse.button_left and args.inputs.mouse.inside_rect?(self)
-
+    if args.inputs.mouse.button_left
+      if args.inputs.mouse.inside_rect?(@wi)
+        @color = 0
+      elsif args.inputs.mouse.inside_rect?(@am)
+        @color = 1
+      elsif args.inputs.mouse.inside_rect?(@gr)
+        @color = 2
+      end
     end
   end
 
+  def get_colors
+    return @colors[@color]
+  end
+
   def render
-    wi = {x: @x,          y: @y, w: @w/3, h: @h, **@colors[0]}.solid!
-    a  = {x: @x+(@w/3),   y: @y, w: @w/3, h: @h, **@colors[1]}.solid!
-    g  = {x: @x+(2*@w/3), y: @y, w: @w/3, h: @h, **@colors[2]}.solid!
     border = {x: @x + (@color * @w/3), y: @y, w: @w/3, h: @h, r: 0, g: 0, b: 0}.border!
     shade = {x: @x + (@color * @w/3),  y: @y, w: @w/3, h: @h, r: 128, g: 128, b: 128, a: 64}.solid!
-    return [wi, a, g, border, shade]
+    return [@wi, @am, @gr, border, shade]
   end
 
 end
