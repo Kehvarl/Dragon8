@@ -53,6 +53,16 @@ class Display
     end
   end
 
+  def recolor new_color, buffer=0
+    (0..@h).each do |y|
+      (0..@w).each do |x|
+        @screen_buffers[buffer][y][x].r = new_color.r
+        @screen_buffers[buffer][y][x].g = new_color.g
+        @screen_buffers[buffer][y][x].b = new_color.b
+      end
+    end
+  end
+
   # Actually set the appearance of a specific pixel in the screen buffer
   def setpixel x, y, r=0, g=0, b=0, buffer=0
     @screen_buffers[buffer][y][x].r = @screen_color.r

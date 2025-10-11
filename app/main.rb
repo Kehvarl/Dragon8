@@ -81,7 +81,7 @@ def main_tick args
   args.state.s.tick args
   args.state.r.tick args
   args.state.color_picker.tick args
-  args.state.display.screen_color = args.state.color_picker.get_colors
+  args.state.display.recolor args.state.color_picker.get_colors
 
   if args.state.rs.status == 1
     args.state.state = :running
