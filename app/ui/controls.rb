@@ -44,7 +44,7 @@ end
 class Color_Picker
   attr_accessor :w, :h, :x, :y, :color
   def initialize args={}
-    @colors = [{r:255, g:255, b:255}, {r:128, g:128, b:0}, {r:0, g:128, b:0}]
+    @colors = [{r:255, g:255, b:255}, {r:255, g:192, b:0}, {r:0, g:128, b:0}]
     @color = args.color || 0
     @x = args.x || 0
     @y = args.y || 0
