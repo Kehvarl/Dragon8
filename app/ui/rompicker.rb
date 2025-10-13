@@ -1,3 +1,28 @@
+class RomIcon
+  attr_accessor :primitives, :x, :y, :text
+  def initialize args
+    @text = args.text || "no name"
+    @x = args.x || 0
+    @y = args.y || 0
+    @w = args.w || 64
+    @h = args.h || 64
+    @highlight = false
+  end
+
+  def tick args
+  end
+
+  def render
+    out = []
+    if @highlight
+      out << {x: @x-1, y: @y-1, w: @w + 2, h: @h + 2, r: 128, g: 0, b: 128}.solid!
+    end
+    out << {x: @x, y: @y, w: @w, h: @w, path: "sprites/rom.png"}.sprite!
+    out << {x: @x, y: @y, w: @w, h: @w, text: @text}.label!
+    out
+  end
+end
+
 class RomPicker
 attr_accessor :selected_file, :close_select, :close_quit
 
