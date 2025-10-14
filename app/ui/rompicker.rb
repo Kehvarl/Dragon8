@@ -2,6 +2,7 @@ class RomIcon
   attr_accessor :primitives, :x, :y, :text
   def initialize args
     @text = args.text || "no name"
+    @type = args.type || "ROM"
     @x = args.x || 0
     @y = args.y || 0
     @w = args.w || 64
@@ -18,7 +19,8 @@ class RomIcon
       out << {x: @x-1, y: @y-1, w: @w + 2, h: @h + 2, r: 128, g: 0, b: 128}.solid!
     end
     out << {x: @x, y: @y, w: @w, h: @w, path: "sprites/rom.png"}.sprite!
-    out << {x: @x, y: @y, w: @w, h: @w, text: @text}.label!
+    out << {x: @x+12, y: @y+54, w: @w, h: @w, text: @type}.label!
+    out << {x: @x+8, y: @y+20, w: @w, h: @w, size_px: 18, text: @text}.label!
     out
   end
 end
