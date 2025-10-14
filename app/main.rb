@@ -18,6 +18,8 @@ def initialize args
   contents = args.gtk.read_file "data/roms/drlogo.rom"
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
+  args.state.ritest = RomIcon.new({})
+
   args.state.rom = nil
 
 end
@@ -30,6 +32,7 @@ def draw_console args
   args.outputs.primitives << args.state.s
   args.outputs.primitives << args.state.r
   args.outputs.primitives << args.state.color_picker.render
+  args.outputs.primitives << args.state.ritest.render
 end
 
 def handle_keys args

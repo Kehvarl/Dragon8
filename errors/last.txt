@@ -1,22 +1,5 @@
-* EXCEPTION:
-* ERROR - :[] method missing on ~NilClass~.
-
-#+begin_src ~NilClass#inspect~
-nil
-#+end_src ~NilClass#inspect~
-
-
-
-The method named
-  :[]
-with args
-  [0]
-doesn't exist on [NilClass, NilClassFalseClass].
-
-(suggestions above)
+* EXCEPTION: 'initialize': wrong number of arguments (0 for 1)
 ** Backtrace:
-*** app/vm/display.rb:59:in recolor
-*** app/vm/display.rb:58:in recolor
-*** app/vm/display.rb:57:in recolor
-*** app/main.rb:84:in main_tick
-*** app/main.rb:144:in tick
+*** app/ui/rompicker.rb:3:in initialize
+*** app/main.rb:21:in initialize
+*** app/main.rb:123:in tick
