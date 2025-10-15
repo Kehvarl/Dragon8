@@ -25,6 +25,15 @@ class RomIcon
   end
 end
 
+# grid of Icons
+# If click, select
+# If click on scroll bar, shift scrollbar and view
+# If select and click, Open
+# on arrow, move select
+# If select is off screen, move screen.
+# If end of screen, prevent move.
+# On Enter and select, open
+
 class RomPicker
 attr_accessor :selected_file, :close_select, :close_quit
 
