@@ -1,5 +1,5 @@
 class RomIcon
-  attr_accessor :primitives, :x, :y, :text
+  attr_accessor :primitives, :x, :y, :text, :highlight
   def initialize args
     @text = args.text || "no name"
     @type = args.type || "ROM"
@@ -33,6 +33,51 @@ end
 # If select is off screen, move screen.
 # If end of screen, prevent move.
 # On Enter and select, open
+
+class RomPicker2
+  attr_accessor :selected_file, :close_select, :close_quit
+  def initialize args
+    @roms = []
+    @file_list = args.gtk.list_files "data/roms/"
+    @file_list.each do |rom|
+      if ['.rom', '.ch8'].include?(rom[-4..-1])
+        @roms << RomIcon.new({text: rom[-5], type: rom[-3..-1]})
+      end
+    end
+    @close_select = false
+    @close_quit = false
+    @selected = 0
+    @selected_file = @roms[@selected]
+  end
+
+  def select_down
+    @selected = [@selected+1, @roms.length() -1].min()
+    @selected_file = @roms[@selected]
+  end
+
+  def select_up
+    @selected = [@selected-1, 0].max()
+    @selected_file = @roms[@selected]
+  end
+
+  def tick args
+    args.outputs.primitives << args.state.rom.render
+  end
+
+  def render
+    draw = []
+    draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/rompick.png"}.sprite!
+    (0..[@file_list.count, 6].min).each do |index|
+      icon =  @roms[index]
+      icon.x = 270
+      icon.y = 556 - (index * 24) -46
+      icon.highlight = (index == @selected)
+      draw << icon.render
+     end
+    draw
+  end
+end
+
 
 class RomPicker
 attr_accessor :selected_file, :close_select, :close_quit
