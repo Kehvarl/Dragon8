@@ -101,7 +101,7 @@ end
 
 def rom_load_tick args
   if args.state.rom == nil
-    args.state.rom = RomPicker.new(args)
+    args.state.rom = RomPicker2.new(args)
   end
 
   args.state.rom.tick args
