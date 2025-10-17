@@ -17,10 +17,12 @@ class RomIcon
     out = []
     if @highlight
       out << {x: @x-1, y: @y-1, w: @w + 2, h: @h + 2, r: 128, g: 0, b: 128}.solid!
+    else
+      out << {x: @x-1, y: @y-1, w: @w + 2, h: @h + 2, r: 128, g: 128, b: 128}.solid!
     end
     out << {x: @x, y: @y, w: @w, h: @w, path: "sprites/rom.png"}.sprite!
     out << {x: @x+12, y: @y+54, w: @w, h: @w, text: @type}.label!
-    out << {x: @x+8, y: @y+20, w: @w, h: @w, size_px: 18, text: @text}.label!
+    out << {x: @x+4, y: @y+20, w: @w, h: @w, size_px: 18, text: @text}.label!
     out
   end
 end
@@ -41,7 +43,7 @@ class RomPicker2
     @file_list = args.gtk.list_files "data/roms/"
     @file_list.each do |rom|
       if ['.rom', '.ch8'].include?(rom[-4..-1])
-        @roms << RomIcon.new({text: rom[-5], type: rom[-3..-1]})
+        @roms << RomIcon.new({text: rom[0..-5], type: rom[-3..-1]})
       end
     end
     @close_select = false
@@ -62,15 +64,30 @@ class RomPicker2
 
   def tick args
     args.outputs.primitives << args.state.rom.render
+    if args.inputs.keyboard.key_down.enter
+      @close_select = true
+    end
+
+    if args.inputs.keyboard.down
+      select_down
+    end
+
+    if args.inputs.keyboard.up
+      select_up
+    end
+
+    if args.inputs.keyboard.key_down.q
+      @close_quit = true
+    end
   end
 
   def render
     draw = []
     draw << {x: 256, y: 300, w: 512, h: 256, path: "sprites/rompick.png"}.sprite!
-    (0..[@file_list.count, 6].min).each do |index|
+    (0..[@roms.count-1, 6].min).each do |index|
       icon =  @roms[index]
-      icon.x = 270
-      icon.y = 556 - (index * 24) -46
+      icon.x = 270 + (index * 72)
+      icon.y = 556 - 96
       icon.highlight = (index == @selected)
       draw << icon.render
      end

@@ -2,7 +2,7 @@
 * ERROR - :x= method missing on ~RomPicker2~.
 
 #+begin_src ~RomPicker2#inspect~
-#<RomPicker2:0x7d075c803db0 @file_list=["IBM Logo.ch8", "drlogo.rom"], @selected=0, @close_quit=false, @roms=[#<RomIcon:0x7d075c802b50 @text="o", @w=64, @highlight=true, @x=270, @h=64, @y=510, @type="ch8">, #<RomIcon:0x7d075c8028b0 @text="o", @w=64, @highlight=false, @x=270, @h=64, @y=486, @type="rom">], @selected_file=#<RomIcon:0x7d075c802b50>, @close_select=false>
+#<RomPicker2:0x7c33a8c8ff50 @file_list=["IBM Logo.ch8", "drlogo.rom"], @selected=0, @close_quit=false, @roms=[#<RomIcon:0x7c33a8c8d1f0 @text="IBM Logo", @w=64, @highlight=true, @x=270, @h=64, @y=510, @type="ch8">, #<RomIcon:0x7c33a8c8cb00 @text="drlogo", @w=64, @highlight=false, @x=270, @h=64, @y=486, @type="rom">], @selected_file=#<RomIcon:0x7c33a8c8d1f0>, @close_select=false>
 #+end_src ~RomPicker2#inspect~
 
 
@@ -11,11 +11,11 @@ The method named
   :x=
 with args
   [270]
-doesn't exist on [RomPicker2, #<Class:#<RomPicker2:0x7d075c803db0>>].
+doesn't exist on [RomPicker2, #<Class:#<RomPicker2:0x7c33a8c8ff50>>].
 
 (suggestions above)
 ** Backtrace:
-*** app/ui/rompicker.rb:72:in render
+*** app/ui/rompicker.rb:73:in render
 *** app/ui/rompicker.rb:70:in render
 *** app/ui/rompicker.rb:64:in tick
 *** app/main.rb:107:in rom_load_tick
