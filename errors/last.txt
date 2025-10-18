@@ -1,22 +1,21 @@
 * EXCEPTION:
-* ERROR - :x= method missing on ~RomPicker2~.
+:inside_rect? failed for inner_rect: {:x=>1220.0, :y=>369.0, :w=>0, :h=>0} outer_rect: #<RomIcon:0x7114b8a56910>.
+* ERROR - :w method missing on ~RomIcon~.
 
-#+begin_src ~RomPicker2#inspect~
-#<RomPicker2:0x7c33a8c8ff50 @file_list=["IBM Logo.ch8", "drlogo.rom"], @selected=0, @close_quit=false, @roms=[#<RomIcon:0x7c33a8c8d1f0 @text="IBM Logo", @w=64, @highlight=true, @x=270, @h=64, @y=510, @type="ch8">, #<RomIcon:0x7c33a8c8cb00 @text="drlogo", @w=64, @highlight=false, @x=270, @h=64, @y=486, @type="rom">], @selected_file=#<RomIcon:0x7c33a8c8d1f0>, @close_select=false>
-#+end_src ~RomPicker2#inspect~
+#+begin_src ~RomIcon#inspect~
+#<RomIcon:0x7114b8a56910 @text="IBM Logo", @w=64, @selected=false, @x=0, @h=64, @highlight=false, @y=0, @type="ch8">
+#+end_src ~RomIcon#inspect~
 
 
 
 The method named
-  :x=
-with args
-  [270]
-doesn't exist on [RomPicker2, #<Class:#<RomPicker2:0x7c33a8c8ff50>>].
+  :w
+doesn't exist on [RomIcon, #<Class:#<RomIcon:0x7114b8a56910>>].
 
 (suggestions above)
 ** Backtrace:
-*** app/ui/rompicker.rb:73:in render
-*** app/ui/rompicker.rb:70:in render
-*** app/ui/rompicker.rb:64:in tick
+*** app/ui/rompicker.rb:16:in tick
+*** app/ui/rompicker.rb:71:in tick
+*** app/ui/rompicker.rb:70:in tick
 *** app/main.rb:107:in rom_load_tick
 *** app/main.rb:134:in tick

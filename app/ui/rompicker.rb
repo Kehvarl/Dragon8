@@ -1,5 +1,5 @@
 class RomIcon
-  attr_accessor :primitives, :x, :y, :text, :highlight
+  attr_accessor :primitives, :x, :y, :w, :h, :text, :highlight, :selected
   def initialize args
     @text = args.text || "no name"
     @type = args.type || "ROM"
@@ -8,9 +8,13 @@ class RomIcon
     @w = args.w || 64
     @h = args.h || 64
     @highlight = false
+    @selected = false
   end
 
   def tick args
+    if args.inputs.mouse.button_left
+      @selected = args.inputs.mouse.inside_rect?(self)
+    end
   end
 
   def render
@@ -63,7 +67,14 @@ class RomPicker2
   end
 
   def tick args
-    args.outputs.primitives << args.state.rom.render
+    @roms.each_with_index do |r, index|
+      r.tick args
+      if r.selected
+        @selected = index
+        @selected_file = @roms[index]
+      end
+    end
+
     if args.inputs.keyboard.key_down.enter
       @close_select = true
     end
@@ -79,6 +90,7 @@ class RomPicker2
     if args.inputs.keyboard.key_down.q
       @close_quit = true
     end
+    args.outputs.primitives << args.state.rom.render
   end
 
   def render
