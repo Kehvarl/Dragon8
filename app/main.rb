@@ -18,8 +18,6 @@ def initialize args
   contents = args.gtk.read_file "data/roms/drlogo.rom"
   args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
 
-  args.state.ritest = RomIcon.new({})
-
   args.state.rom = nil
 
 end
@@ -101,7 +99,7 @@ end
 
 def rom_load_tick args
   if args.state.rom == nil
-    args.state.rom = RomPicker2.new(args)
+    args.state.rom = RomPicker.new(args)
   end
 
   args.state.rom.tick args
