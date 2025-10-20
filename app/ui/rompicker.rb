@@ -40,7 +40,7 @@ end
 # If end of screen, prevent move.
 # On Enter and select, open
 
-class RomPicker2
+class RomPicker
   attr_accessor :selected_file, :close_select, :close_quit
   def initialize args
     @roms = []
@@ -108,7 +108,7 @@ class RomPicker2
 end
 
 
-class RomPicker
+class RomPickerOld
 attr_accessor :selected_file, :close_select, :close_quit
 
   def initialize args
