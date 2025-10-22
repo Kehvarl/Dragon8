@@ -241,7 +241,7 @@ class CPU
       @pc = address + @register[0]
 
     when 0xc # RND byte AND kk: Set Register X to a Random number (0-255) and AND with KK
-      regx, cost = rv_decode(rest)
+      regx, const = rv_decode(rest)
       byte = rand(256) & const
       @register[regx] = byte
       debug_msg += "RND and #{const} (#{byte.to_s(16).rjust(4, "0")}\n"
