@@ -1,6 +1,7 @@
 class RomIcon
-  attr_accessor :primitives, :x, :y, :w, :h, :text, :highlight, :selected
+  attr_accessor :primitives, :x, :y, :w, :h, :text, :highlight, :selected, :filename
   def initialize args
+    @filename = args.filename || ""
     @text = args.text || "no name"
     @type = args.type || "ROM"
     @x = args.x || 0
@@ -47,7 +48,7 @@ class RomPicker
     @file_list = args.gtk.list_files "data/roms/"
     @file_list.each do |rom|
       if ['.rom', '.ch8'].include?(rom[-4..-1])
-        @roms << RomIcon.new({text: rom[0..-5], type: rom[-3..-1]})
+        @roms << RomIcon.new({filename: rom, text: rom[0..-5], type: rom[-3..-1]})
       end
     end
     @close_select = false

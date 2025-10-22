@@ -104,7 +104,7 @@ def rom_load_tick args
   args.state.rom.tick args
 
   if args.state.rom.close_select
-      contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file}"
+      contents = args.gtk.read_file "data/roms/#{args.state.rom.selected_file.filename}"
 
       args.state.cpu.set(contents.to_s.unpack('n*'), 0x200)
   end
