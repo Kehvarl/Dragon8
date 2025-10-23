@@ -1,8 +1,8 @@
 class Display
   attr_accessor :screen_color
   def initialize args
-    @w = args.w || 64
-    @h = args.h || 32
+    @w = args.w || 70
+    @h = args.h || 40
     @screen_width  = args.screen_width  || 1280
     @screen_height = args.screen_heignt || 720
     @margin_top    = args.margin_top    || 64

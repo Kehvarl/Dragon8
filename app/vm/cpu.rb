@@ -127,7 +127,7 @@ class CPU
       @stack[@sp] = @pc
       address = rest
       @pc = address
-      debug_msg ++ "CALL #{address}\n"
+      debug_msg += "CALL #{address}\n"
 
     when 0x3 # SE Vx, kk: Skip Next If Register X Equals Value KK
       reg, val = rv_decode(rest)
@@ -220,7 +220,7 @@ class CPU
         @register[regx] = @register[regy] - @register[regx]
 
       when 0xe # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
-        debug_msg ++ "SHL V#{regx} (#{@register[regx]})\n"
+        debug_msg += "SHL V#{regx} (#{@register[regx]})\n"
         @register[15] = @register[regx] & 128
         @register[regx] = @register[regx] * 2
       end
@@ -304,7 +304,7 @@ class CPU
       when 0x29 # LD F, Vx: Load address of sprite for value Vx into I
         @i = @symbol[@register[regx]]
       when 0x33 # LD B, Vx: Load the BCD Representation of value in Register X into memory
-        val = @resgister[regx].to_s(10).rjust(2, "0")
+        val = @register[regx].to_s(10).rjust(3, "0")
         @memory[@i] = val[0].to_i(10)
         @memory[@i+1] = val[1].to_i(10)
         @memory[@i+2] = val[2].to_i(10)
