@@ -8,6 +8,14 @@ class Keyboard
       '8','9', 'A', 'B', 'C', 'D', 'E', 'F']
   end
 
+  def tick args
+    if args.inputs.keyboard.key_down.char
+      keydown args.inputs.keyboard.key_down.char
+    elsif args.inputs.keyboard.key_uo
+      keyup @current
+    end
+  end
+
   def keydown key
     if @allowed_keys.include?(key)
       @current = key
