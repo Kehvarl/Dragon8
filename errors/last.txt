@@ -1,7 +1,22 @@
-* EXCEPTION: 'to_i': wrong number of arguments (1 for 0)
+* EXCEPTION:
+* ERROR - :g= method missing on ~Class~.
+
+#+begin_src ~Class#inspect~
+NIL
+#+end_src ~Class#inspect~
+
+
+
+The method named
+  :g=
+with args
+  [255]
+doesn't exist on [NilClass].
+
+(suggestions above)
 ** Backtrace:
-*** app/vm/cpu.rb:312:in decode
-*** app/vm/cpu.rb:76:in step
-*** app/vm/cpu.rb:62:in tick
-*** app/vm/cpu.rb:61:in tick
-*** app/main.rb:134:in tick
+*** app/vm/display.rb:60:in recolor
+*** app/vm/display.rb:58:in recolor
+*** app/vm/display.rb:57:in recolor
+*** app/main.rb:84:in main_tick
+*** app/main.rb:144:in tick

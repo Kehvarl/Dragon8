@@ -4,24 +4,44 @@ class CPU
     @debug = false
     @ticks_per_frame = 1
     @display = display
-    @register = []
+    @register = Array.new(16, 0)
     @i = 0
     @pc = 0
-    @memory = []
-    (0..4096).each do
-      @memory << 0
-    end
+    @memory = Array.new(4096, 0)
     @sp = 0
     @stack = []
     (0..48).each do
       @stack << 0
     end
     @symbol = {}
+    setup_font()
     @delay = 0
     @sound = 0
     @keydown = nil
     @keycapture = false
     @keytarget = 0
+  end
+
+  def setup_font
+    [
+     0xF0, 0x90, 0x90, 0x90, 0xF0, # 0
+     0x20, 0x60, 0x20, 0x20, 0x70, # 1
+     0xF0, 0x10, 0xF0, 0x80, 0xF0, # 2
+     0xF0, 0x10, 0xF0, 0x10, 0xF0, # 3
+     0x90, 0x90, 0xF0, 0x10, 0x10, # 4
+     0xF0, 0x80, 0xF0, 0x10, 0xF0, # 5
+     0xF0, 0x80, 0xF0, 0x90, 0xF0, # 6
+     0xF0, 0x10, 0x20, 0x40, 0x40, # 7
+     0xF0, 0x90, 0xF0, 0x90, 0xF0, # 8
+     0xF0, 0x90, 0xF0, 0x10, 0xF0, # 9
+     0xF0, 0x90, 0xF0, 0x90, 0x90, # A
+     0xE0, 0x90, 0xE0, 0x90, 0xE0, # B
+     0xF0, 0x80, 0x80, 0x80, 0xF0, # C
+     0xE0, 0x90, 0x90, 0x90, 0xE0, # D
+     0xF0, 0x80, 0xF0, 0x80, 0xF0, # E
+     0xF0, 0x80, 0xF0, 0x80, 0x80  # F
+    ].each_with_index { |b, i| @memory[0x50 + i] = b }
+    0.upto(0xF) { |n| @symbol[n] = 0x50 + n * 5 }
   end
 
   def vf
@@ -58,7 +78,7 @@ class CPU
       @sound -=1
     end
 
-    (0..@ticks_per_frame).each do
+    (0...@ticks_per_frame).each do
       debug_msg = step
       if @debug
         puts(debug_msg)
@@ -92,7 +112,7 @@ class CPU
     op1 = @memory[@pc] #readbyte(@pc)
     op2 = @memory[@pc +1] #readbyte(@pc + 1)
     @pc += 2
-    if @pc > 4096
+    if @pc >= 4096
       @pc = 0
     end
     ((op1 << 8) + op2)
@@ -102,7 +122,7 @@ class CPU
     debug_msg = ""
     op = (opcode & 0xf000) >> 12
     rest = (opcode & 0x0fff)
-    opcode = opcode.to_s(16).rjust(0,4)
+    opcode = opcode.to_s(16).rjust(4,'0')
     case op
 
     when 0x0
@@ -252,7 +272,7 @@ class CPU
 
       n = (rest & 0x00f)
       sprite = []
-      (0...n).each do |offset|
+      (0..n).each do |offset|
         sprite << @memory[@i + offset]
       end
       debug_msg += "DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})\n"
