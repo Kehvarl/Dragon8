@@ -10,8 +10,8 @@ class Keyboard
 
   def tick args
     if args.inputs.keyboard.key_down.char
-      keydown args.inputs.keyboard.key_down.char
-    elsif args.inputs.keyboard.key_uo
+      keydown args.inputs.keyboard.key_down.char.upcase
+    elsif args.inputs.keyboard.key_up
       keyup @current
     end
   end
