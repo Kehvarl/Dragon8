@@ -8,7 +8,7 @@ class CPU
     @i = 0
     @pc = 0
     @memory = Array.new(4096, 0)
-    @sp = 0
+    @sp = -1
     @stack = []
     (0..48).each do
       @stack << 0
@@ -78,7 +78,7 @@ class CPU
       @sound -=1
     end
 
-    (0...@ticks_per_frame).each do
+    @ticks_per_frame.times do
       debug_msg = step
       if @debug
         puts(debug_msg)
@@ -111,10 +111,7 @@ class CPU
   def fetch
     op1 = @memory[@pc] #readbyte(@pc)
     op2 = @memory[@pc +1] #readbyte(@pc + 1)
-    @pc += 2
-    if @pc >= 4096
-      @pc = 0
-    end
+    @pc = (@pc + 2) & 4095
     ((op1 << 8) + op2)
   end
 
@@ -126,7 +123,7 @@ class CPU
     case op
 
     when 0x0
-      if rest != 0 # SYS NNN: Call System Routine NNN
+      if rest == 0 # SYS NNN: Call System Routine NNN
       # Execute Call Statment
       elsif rest == 0x0e0 # CLS: Clear Screen
         debug_msg += "Clearing Screen\n"
@@ -178,7 +175,7 @@ class CPU
     when 0x7 # ADD Vx, kk: Add KK to Register X, store in Register X
       reg, val = rv_decode(rest)
       if @register[reg] + val > 255
-        val -= 255
+        val -= 256
         @register[15] = 1
       end
       @register[reg] += val
@@ -209,7 +206,7 @@ class CPU
         debug_msg += "ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}\n"
         sum = @register[regx] + @register[regy]
         if sum > 255
-          sum -= 255
+          sum -= 256
           @register[15] = 1
         end
         @register[regx] = sum
@@ -272,7 +269,7 @@ class CPU
 
       n = (rest & 0x00f)
       sprite = []
-      (0..n).each do |offset|
+      (0...n).each do |offset|
         sprite << @memory[@i + offset]
       end
       debug_msg += "DRW V#{regx}, V#{regy}, #{n}: (#{@register[regx]}, #{@register[regy]}), #{@i.to_s(16).rjust(4, "0")})\n"
