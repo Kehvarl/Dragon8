@@ -1,22 +1,16 @@
 * EXCEPTION:
-* ERROR - :g= method missing on ~Class~.
+* ERROR:
+** method_missing: time
+** instance:       1
+** on class:       Integer
+** with modules:   [NumericDeprecated, ValueType, Comparable, Kernel]
+** with values:    1
+** given args:     [[]]
+** exception:      can't define singleton
+** backtrace:
+app/vm/cpu.rb:81:in tick
+app/main.rb:134:in tick
 
-#+begin_src ~Class#inspect~
-NIL
-#+end_src ~Class#inspect~
-
-
-
-The method named
-  :g=
-with args
-  [255]
-doesn't exist on [NilClass].
-
-(suggestions above)
 ** Backtrace:
-*** app/vm/display.rb:60:in recolor
-*** app/vm/display.rb:58:in recolor
-*** app/vm/display.rb:57:in recolor
-*** app/main.rb:84:in main_tick
-*** app/main.rb:144:in tick
+*** app/vm/cpu.rb:81:in tick
+*** app/main.rb:134:in tick
