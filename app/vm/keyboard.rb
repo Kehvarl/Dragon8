@@ -2,6 +2,7 @@ class Keyboard
   attr_accessor :current, :buffer
   def initialize
     @current = nil
+    @active = []
     @buffer = []
     @allowed_keys = [
       '0', '1', '2', '3', '4', '5', '6', '7',
