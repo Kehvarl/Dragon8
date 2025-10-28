@@ -205,21 +205,14 @@ class CPU
       when 0x4 # ADD Vx, Vy: Register X XOR Register Y, store in Register X, Carry in Vf
         debug_msg += "ADD V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] + @register[regy]}\n"
         sum = @register[regx] + @register[regy]
-        if sum > 255
-          sum -= 256
-          @register[15] = 1
-        end
-        @register[regx] = sum
+        @register[15] = sum > 0xFF ? 1 : 0
+        @register[regx] = sum & 0xFF
 
       when 0x5 # SUB Vx, Vy: Register X - Register Y, store in Register X
         debug_msg += "SUB V#{regx} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regx] - @register[regy]}\n"
-        if @register[regx] > @register[regy]
-          @register[15] = 1
-        else
-          @register[15] = 0
-          @register[regx] += 256
-        end
-        @register[regx] = @register[regx] - @register[regy]
+        sum = @register[regx] + @register[regy]
+        @register[15] = sum > 0xFF ? 1 : 0
+        @register[regx] = sum & 0xFF
 
       when 0x6 # SHR Vx, {Vy}: If Register X is odd, VF = 1.  Register X = Register X /2
         debug_msg += "SHR V#{regx} (#{@register[regx]})\n"
@@ -228,13 +221,9 @@ class CPU
 
       when 0x7 # SUBN Vx, Vy: Register Y - Register X, store in Register X
         debug_msg += "SUBN  V#{regy} (#{@register[regx]}), V#{regy} (#{@register[regy]}): #{@register[regy] - @register[regx]}\n"
-        if @register[regy] > @register[regx]
-          @register[15] = 1
-        else
-          @register[15] = 0
-          @register[regy] += 256
-        end
-        @register[regx] = @register[regy] - @register[regx]
+        sum = @register[regx] + @register[regy]
+        @register[15] = sum > 0xFF ? 1 : 0
+        @register[regx] = sum & 0xFF
 
       when 0xe # SHL Vx, {Vy}: If Regester X MSB It Set, VF = 1.  Register X = Register X*2
         debug_msg += "SHL V#{regx} (#{@register[regx]})\n"
