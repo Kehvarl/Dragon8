@@ -158,7 +158,7 @@ class CPU
       if @register[reg] != val
         @pc += 2
       end
-      debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
+      debug_msg += "SNE Vx #{@register[reg]} != #{val}\n"
 
     when 0x5 # SE Vx, Vy: Skip Next If Register X Equals Register Y
       regx, regy = rxry_decode(rest)
