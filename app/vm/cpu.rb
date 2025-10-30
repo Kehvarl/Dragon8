@@ -8,7 +8,7 @@ class CPU
     @i = 0
     @pc = 0
     @memory = Array.new(4096, 0)
-    @sp = -1
+    @sp = 0
     @stack = []
     (0..48).each do
       @stack << 0
@@ -129,8 +129,8 @@ class CPU
         debug_msg += "Clearing Screen\n"
         @display.clear()
       elsif rest == 0x0ee # RTN: Return from Subroutine
-        @pc = @stack[@sp]
         @sp -= 1
+        @pc = @stack[@sp]
         debug_msg += "Return to #{@pc}\n"
       end
 
@@ -140,8 +140,8 @@ class CPU
       @pc = address
 
     when 0x2 # CALL NNN: Go to subroutine at address NNN
-      @sp += 1
       @stack[@sp] = @pc
+      @sp += 1
       address = rest
       @pc = address
       debug_msg += "CALL #{address}\n"
@@ -158,7 +158,7 @@ class CPU
       if @register[reg] != val
         @pc += 2
       end
-      debug_msg += "SNE Vx #{@register[reg]} != @{val}\n"
+      debug_msg += "SNE Vx #{@register[reg]} != #{val}\n"
 
     when 0x5 # SE Vx, Vy: Skip Next If Register X Equals Register Y
       regx, regy = rxry_decode(rest)
