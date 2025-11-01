@@ -1,3 +1,4 @@
+# Chip8 CPU
 class CPU
   attr_accessor :debug, :ticks_per_frame, :register, :i, :pc, :memory, :sp, :stack, :delay, :sound
   def initialize display
